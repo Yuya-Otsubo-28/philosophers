@@ -1,8 +1,23 @@
 #include "philo.h"
 #include <unistd.h>
 
-void error_handler(int enum)
+void destroy_forks(t_fork *fork, int num_of_forks)
 {
-    if (enum == ARGS_ERROR)
-        ft_putstr_fd("*** ARGUMENT ERROR ***/n", STDERR_FILENO)
+    int i;
+
+    i = 0;
+    while (i < num_of_forks)
+    {
+        pthread_mutex_destroy(forks[i].fork);
+        i++;
+    }
+}
+
+void error_handler(int error_num)
+{
+    if (error_num == ARGS_ERROR)
+        ft_putstr_fd("*** ARGUMENT ERROR ***/n", STDERR_FILENO);
+    if (error_num == MALLOC_ERROR)
+        ft_putstr_fd("*** MALLOC ERROR ***/n", STDERR_FILENO);
+    exit(1);
 }

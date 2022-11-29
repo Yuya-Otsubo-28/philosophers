@@ -2,15 +2,18 @@
 
 void init_env(int argc, char *argv[], t_env *env)
 {
+    t_time *time;
+
     env->num_of_philos = ph_atoi(argv[1]);
     env->time_to_die = ph_atoi(argv[2]);
     env->time_to_eat = ph_atoi(argv[3]);
     env->time_to_sleep = ph_atoi(argv[4]);
+    env->start_time = time.tv_usec;
     if (argc == ADDED_ARGS_NUM)
         env->must_eat_nums = ph_atoi(argv[5]);
 }
 
-t_fork *init_forks(t_env *env)
+static t_fork *init_forks(t_env *env)
 {
     t_fork *forks;
     size_t i;
@@ -27,7 +30,7 @@ t_fork *init_forks(t_env *env)
     return (forks);
 }
 
-t_philo *init_philos(t_env *env, t_fork *forks)
+static t_philo *init_philos(t_env *env, t_fork *forks)
 {
     t_philo *philos;
     size_t i;
@@ -37,7 +40,8 @@ t_philo *init_philos(t_env *env, t_fork *forks)
         return (NULL);
     i = 0;
     while (i < env->num_of_philos)
-    {
+    {  
+        memset()
         if (i == 0)
         {
             philos[0].right = forks[0];
