@@ -1,6 +1,12 @@
 #ifndef PHILO_H
 # define PHILO_H
 
+#include <stdio.h>
+#include <unistd.h>
+#include <stdlib.h>
+#include <sys/time.h>
+#include <pthread.h>
+
 #define MUST_ARGS_NUM 5
 #define ADDED_ARGS_NUM 6
 #define ARG_ERROR 0

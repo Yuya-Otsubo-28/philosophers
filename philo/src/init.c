@@ -18,21 +18,54 @@ t_fork *init_forks(t_env *env)
     forks = (t_fork *)malloc(sizeof(t_fork) * env->num_of_philos);
     if (!forks)
         return (NULL);
-    i = -1;
-    while (++i < env->num_of_philos)
+    i = 0;
+    while (i < env->num_of_philos)
+    {
         pthread_mutex_init(forks[i]->fork, NULL);
+        i++;
+    }
     return (forks);
 }
 
-t_philo *init_philo_fork(t_env *env, t_philo *philo)
+t_philo *init_philos(t_env *env, t_fork *forks)
+{
+    t_philo *philos;
+    size_t i;
+
+    philos = (t_philo *)malloc(sizeof(t_philo) * env->num_of_philos);
+    if (!philos)
+        return (NULL);
+    i = 0;
+    while (i < env->num_of_philos)
+    {
+        if (i == 0)
+        {
+            philos[0].right = forks[0];
+            philos[0].left = forks[env->num_of_philos - 1];
+        }
+        else
+        {
+            philos[i].right = forks[i];
+            philos[i].left = forks[i - 1];
+        }
+        philos[i].env = env;
+        philos[i].num = i + 1;
+        i++;
+    }
+    return (philos);
+}
+
+void init_philo_fork(t_env *env, t_philo *philo)
 {
     t_fork *forks;
-    t_philo *philos;
 
     forks = init_forks(env);
     if (!forks)
-        return (NULL);
-    philos = (t_philo *)malloc(sizeof(t_philo) * env->num_of_philos);
-    if (!philo)
-        return (NULL);
+        error_handler(MALLOC_ERROR);
+    philos = init_philos(env, forks);
+    if (!philos)
+    {
+        dstory_forks(forks, env->num_of_philos);
+        error_handler(MALLOC_ERROR);
+    }
 }
