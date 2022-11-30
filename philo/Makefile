@@ -1,7 +1,10 @@
 NAME = philo
 SRCS = 	src/main.c\
 		src/error.c\
-		src/init.c
+		src/init.c\
+		src/ft_putstr_fd.c\
+		src/ph_atoi.c\
+		src/ft_strlen.c
 OBJDIR = ./obj
 OBJS = $(addprefix $(OBJDIR)/, $(SRCS:.c=.o))
 INCLUDE = -I ./include

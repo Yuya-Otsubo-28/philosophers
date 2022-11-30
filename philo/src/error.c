@@ -1,7 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   error.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: yotsubo <yotsubo@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/11/30 10:05:50 by yotsubo           #+#    #+#             */
+/*   Updated: 2022/11/30 10:05:51 by yotsubo          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo.h"
 #include <unistd.h>
 
-void destroy_forks(t_fork *fork, int num_of_forks)
+void destroy_forks(t_fork *forks, int num_of_forks)
 {
     int i;
 
