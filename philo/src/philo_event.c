@@ -6,7 +6,7 @@
 /*   By: yotsubo <yotsubo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 13:30:41 by yotsubo           #+#    #+#             */
-/*   Updated: 2022/11/30 13:47:55 by yotsubo          ###   ########.fr       */
+/*   Updated: 2022/11/30 14:20:25 by yotsubo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,11 @@ int dis_msg(pthread_t *philo, int status)
     if (judge_finish(philo->env) == FINISH)
         return (FINISH);
     pthread_mutex_lock(philo->sts_mutex);
+    if (dis_time - philo->last_eat > philo->env->time_to_die)
+    {
+        dis_time = philo->last_eat + philo->env->time_to_die;
+        philo->status = DEAD;
+    }
     pthread_mutex_lock(philo->msg_mutex);
     if (status == TAKE)
         printf("%ld %d has taken a fork\n", dis_time, num);
@@ -38,7 +43,7 @@ int dis_msg(pthread_t *philo, int status)
     return (0);
 }
 
-void philo_odd(t_philo *philo)
+int philo_odd(t_philo *philo)
 {
     while (1)
     {
@@ -58,6 +63,32 @@ void philo_odd(t_philo *philo)
         dis_msg(philo, EAT);
         pthread_mutex_unlock(philo->left);
         pthread_mutex_unlock(philo->right);
+        usleep(philo->env->time_to_eat);
+        dis_msg(philo, SLEEP);
+        usleep(philo->env->time_to_sleep);
+    }
+}
+
+int philo_even(t_philo *philo)
+{
+    while (1)
+    {
+        pthread_mutex_lock(philo->right);
+        if (dis_msg(philo, TAKE) == FINISH)
+        {
+            pthread_mutex_unlock(philo->right);
+            return ;
+        }
+        pthread_mutex_lock(philo->left);
+        if (dis_msg(philo, TAKE) == FINISH)
+        {
+            pthread_mutex_unlock(philo->right);
+            pthread_mutex_unlock(philo->left);
+            return ;
+        }
+        dis_msg(philo, EAT);
+        pthread_mutex_unlock(philo->right);
+        pthread_mutex_unlock(philo->left);
         usleep(philo->env->time_to_eat);
         dis_msg(philo, SLEEP);
         usleep(philo->env->time_to_sleep);
