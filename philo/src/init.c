@@ -6,7 +6,7 @@
 /*   By: yotsubo <yotsubo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 10:05:17 by yotsubo           #+#    #+#             */
-/*   Updated: 2022/11/30 12:52:48 by yotsubo          ###   ########.fr       */
+/*   Updated: 2022/11/30 13:45:53 by yotsubo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,13 +58,20 @@ static t_fork **init_forks(t_env *env)
 static t_philo *init_philos(t_env *env, t_fork **forks)
 {
     t_philo *philos;
-    pthread_mutex_t msg;
+    pthread_mutex_t msg_mutex;
+    pthread_mutex_t *sts_mutex;
     int i;
 
     philos = (t_philo *)malloc(sizeof(t_philo) * env->num_of_philos);
     if (!philos)
         return (NULL);
-    pthread_mutex_init(&msg, NULL);
+    sts_mutex =  (pthread_mutex_t *)malloc(sizeof(pthread_t) * env->num_of_philos);
+    if (!sts_mutex)
+    {
+        free(philos);
+        return (NULL);
+    }
+    pthread_mutex_init(&msg_mutex, NULL);
     i = 0;
     while (i < env->num_of_philos)
     {
@@ -78,6 +85,7 @@ static t_philo *init_philos(t_env *env, t_fork **forks)
             philos[i].right = forks[i];
             philos[i].left = forks[i - 1];
         }
+        philos[i].sts_mutex = &sts_mutex[i];
         philos[i].env = env;
         philos[i].num = i + 1;
         philos[i].msg = msg;

@@ -54,7 +54,8 @@ struct s_philo {
     t_fork *left;
     t_time *lsat_eat;
     t_time *last_sleep;
-    pthread_mutex_t *msg;
+    pthread_mutex_t *msg_mutex;
+    pthread_mutex_t *sts_mutex
     int status;
     int num;
     int eat_times;

@@ -6,7 +6,7 @@
 /*   By: yotsubo <yotsubo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 16:13:48 by yotsubo           #+#    #+#             */
-/*   Updated: 2022/11/30 10:05:46 by yotsubo          ###   ########.fr       */
+/*   Updated: 2022/11/30 13:20:55 by yotsubo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int ph_atoi(const char *str)
 	long tmp;
 
 	tmp = ft_atol(str);
-	if (tmp < INT_MIN || tmp > INT_MAX)
+	if (tmp < 0 || tmp > INT_MAX)
 		error_handler(ARGS_ERROR);
 	return ((int)tmp);
 }

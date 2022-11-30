@@ -6,7 +6,7 @@
 /*   By: yotsubo <yotsubo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 12:44:42 by yotsubo           #+#    #+#             */
-/*   Updated: 2022/11/30 12:56:41 by yotsubo          ###   ########.fr       */
+/*   Updated: 2022/11/30 13:51:07 by yotsubo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ int judge_finish(t_env *env)
     i = 0;
     while (i < env->num_of_philos)
     {
+        pthread_mutex_lock(env->philos[i]->sts_mutex);
         if (env->philos[i]->status == DEAD)
             return (FINISH);
         if (env->must_eat_num != NOTSET)
@@ -28,6 +29,7 @@ int judge_finish(t_env *env)
             if (env->philos[i]->eat_times == env->must_eat_num)
                 ach_num++;
         }
+        pthread_mutex_unlock(env->philos[i]->sts_mutex);
         i++;
     }
     if (ach_num == env->num_of_philos)
