@@ -6,7 +6,7 @@
 /*   By: yotsubo <yotsubo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 10:05:17 by yotsubo           #+#    #+#             */
-/*   Updated: 2022/11/30 16:47:26 by yotsubo          ###   ########.fr       */
+/*   Updated: 2022/11/30 17:12:50 by yotsubo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,6 @@ static t_philo **allc_philos(t_env *env)
 static t_philo **init_philos(t_env *env, t_fork **forks)
 {
     t_philo **philos;
-    pthread_mutex_t msg_mutex;
     pthread_mutex_t *sts_mutex;
 
     philos = allc_philos(env);

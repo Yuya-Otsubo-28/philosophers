@@ -6,7 +6,7 @@
 /*   By: yotsubo <yotsubo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 13:30:41 by yotsubo           #+#    #+#             */
-/*   Updated: 2022/11/30 16:49:55 by yotsubo          ###   ########.fr       */
+/*   Updated: 2022/11/30 17:39:32 by yotsubo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static void judge_msg(t_philo *philo, int status, long dis_time)
         printf("%ld %d died\n", dis_time, philo->num);
 }
 
-int dis_msg(t_philo *philo, int status)
+static int dis_msg(t_philo *philo, int status)
 {
     t_time time;
     long dis_time;
@@ -51,54 +51,70 @@ int dis_msg(t_philo *philo, int status)
     return (0);
 }
 
-int philo_odd(t_philo *philo)
+static int philo_odd(t_philo *philo)
 {
     while (1)
     {
+        if (dis_msg(philo, THINK) == FINISH)
+            return (FINISH);
         pthread_mutex_lock(philo->left);
         if (dis_msg(philo, TAKE) == FINISH)
         {
             pthread_mutex_unlock(philo->left);
-            return ;
+            return (FINISH);
         }
         pthread_mutex_lock(philo->right);
         if (dis_msg(philo, TAKE) == FINISH)
         {
             pthread_mutex_unlock(philo->left);
             pthread_mutex_unlock(philo->right);
-            return ;
+            return (FINISH);
         }
-        dis_msg(philo, EAT);
+        if (dis_msg(philo, EAT) == FINISH)
+        {
+            pthread_mutex_unlock(philo->left);
+            pthread_mutex_unlock(philo->right);
+            return (FINISH);
+        }
         pthread_mutex_unlock(philo->left);
         pthread_mutex_unlock(philo->right);
         usleep(philo->env->time_to_eat);
-        dis_msg(philo, SLEEP);
+        if (dis_msg(philo, SLEEP) == FINISH)
+            return (FINISH);
         usleep(philo->env->time_to_sleep);
     }
 }
 
-int philo_even(t_philo *philo)
+static int philo_even(t_philo *philo)
 {
     while (1)
     {
+        if (dis_msg(philo, THINK) == FINISH)
+            return (FINISH);
         pthread_mutex_lock(philo->right);
         if (dis_msg(philo, TAKE) == FINISH)
         {
             pthread_mutex_unlock(philo->right);
-            return ;
+            return (FINISH);
         }
         pthread_mutex_lock(philo->left);
         if (dis_msg(philo, TAKE) == FINISH)
         {
             pthread_mutex_unlock(philo->right);
             pthread_mutex_unlock(philo->left);
-            return ;
+            return (FINISH);
         }
-        dis_msg(philo, EAT);
-        pthread_mutex_unlock(philo->right);
+        if (dis_msg(philo, EAT) == FINISH)
+        {
+            pthread_mutex_unlock(philo->left);
+            pthread_mutex_unlock(philo->right);
+            return (FINISH);
+        }
         pthread_mutex_unlock(philo->left);
+        pthread_mutex_unlock(philo->right);
         usleep(philo->env->time_to_eat);
-        dis_msg(philo, SLEEP);
+        if (dis_msg(philo, SLEEP) == FINISH)
+            return (FINISH);
         usleep(philo->env->time_to_sleep);
     }
 }

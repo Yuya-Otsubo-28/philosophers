@@ -6,7 +6,7 @@
 /*   By: yotsubo <yotsubo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 16:50:23 by yotsubo           #+#    #+#             */
-/*   Updated: 2022/11/30 16:50:25 by yotsubo          ###   ########.fr       */
+/*   Updated: 2022/11/30 17:37:59 by yotsubo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@
 #define DEAD 4
 
 #define RIGHT 1
-#define LEFT 2
+#define LEFT -1
 
 #define FINISH 1
 #define NOTFIN -1
@@ -105,4 +105,21 @@ void destroy_sts(pthread_mutex_t *sts_mutex, int num_of_philos);
 
 void destroy_forks(t_fork **forks, int num_of_forks);
 
+/* * * * * * * * * */
+/*  make_philos.c  */
+/* * * * * * * * * */
+
+void make_philos(t_philo **philos, t_env *env);
+
+/* * * * * * * * * */
+/*  philo_event.c  */
+/* * * * * * * * * */
+
+void *philo_event(void *arg);
+
+/* * * * * * * * * */
+/* judge_finish.c  */
+/* * * * * * * * * */
+
+int judge_finish(t_env *env);
 #endif

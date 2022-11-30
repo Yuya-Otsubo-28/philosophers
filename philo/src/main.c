@@ -6,7 +6,7 @@
 /*   By: yotsubo <yotsubo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 10:05:37 by yotsubo           #+#    #+#             */
-/*   Updated: 2022/11/30 16:43:29 by yotsubo          ###   ########.fr       */
+/*   Updated: 2022/11/30 17:13:21 by yotsubo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,5 +26,5 @@ int main(int argc, char *argv[])
     env.msg_mutex = &msg_mutex;
     philos = NULL;
     init_philo_fork(&env, philos);
-    // make_philos(&philos, env);
+    make_philos(&philos, env);
 }

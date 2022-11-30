@@ -6,7 +6,7 @@
 #    By: yotsubo <yotsubo@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/30 10:05:26 by yotsubo           #+#    #+#              #
-#    Updated: 2022/11/30 10:09:32 by yotsubo          ###   ########.fr        #
+#    Updated: 2022/11/30 17:04:15 by yotsubo          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,9 +14,7 @@ NAME = philo
 SRCS = 	src/main.c\
 		src/error.c\
 		src/init.c\
-		src/ft_putstr_fd.c\
-		src/ph_atoi.c\
-		src/ft_strlen.c
+		src/philo_utils.c
 OBJDIR = ./obj
 OBJS = $(addprefix $(OBJDIR)/, $(SRCS:.c=.o))
 INCLUDE = -I ./include
