@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   philo.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: yotsubo <yotsubo@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/11/30 16:50:23 by yotsubo           #+#    #+#             */
+/*   Updated: 2022/11/30 16:50:25 by yotsubo          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef PHILO_H
 # define PHILO_H
 
@@ -11,8 +23,8 @@
 #define MUST_ARGS_NUM 5
 #define ADDED_ARGS_NUM 6
 
-#define ARGS_ERROR 0
-#define MALLOC_ERROR 1
+#define ARGS_ERROR 1
+#define MALLOC_ERROR 2
 
 #define SLEEP 0
 #define EAT 1
@@ -39,9 +51,10 @@ struct s_env {
     int time_to_die;
     int num_of_philos;
     int must_eat_num;
-    t_time *start_time;
-    t_philo *philos;
+    long start_time;
+    t_philo **philos;
     t_fork **forks;
+    pthread_mutex_t *msg_mutex;
 };
 
 struct s_fork {
@@ -52,29 +65,44 @@ struct s_philo {
     t_env *env;
     t_fork *right;
     t_fork *left;
-    t_time *lsat_eat;
-    t_time *last_sleep;
+    long last_eat;
     pthread_mutex_t *msg_mutex;
-    pthread_mutex_t *sts_mutex
+    pthread_mutex_t *sts_mutex;
     int status;
     int num;
     int eat_times;
 };
 
-void init_philo_fork(t_env *env, t_philo *philo);
+/* * * * * * * * * */
+/*     init.c      */
+/* * * * * * * * * */
+
+void init_philo_fork(t_env *env, t_philo **philo);
 
 void init_env(int argc, char *argv[], t_env *env, t_time *time);
 
-int error_handler(int error_num);
+/* * * * * * * * * */
+/*  philo_utils.c  */
+/* * * * * * * * * */
 
-void destroy_forks(t_fork **forks, int num_of_forks);
+long adj_time_form(t_time *time);
 
 void	ft_putstr_fd(char *s, int fd);
 
-int ph_atoi(const char *str);
-
 size_t	ft_strlen(const char *str);
 
-long adj_time_form(t_time *time);
+int ph_atoi(const char *str);
+
+/* * * * * * * * * */
+/*    error.c      */
+/* * * * * * * * * */
+
+int error_handler(int error_num);
+
+void free_philos(t_philo **philos, int num_of_philos);
+
+void destroy_sts(pthread_mutex_t *sts_mutex, int num_of_philos);
+
+void destroy_forks(t_fork **forks, int num_of_forks);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: yotsubo <yotsubo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 10:23:34 by yotsubo           #+#    #+#             */
-/*   Updated: 2022/11/30 14:04:31 by yotsubo          ###   ########.fr       */
+/*   Updated: 2022/11/30 16:31:24 by yotsubo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ long adj_time_form(t_time *time)
 {
     long res;
 
-    res = time->tvf_sec * 100;
+    res = time->tv_sec * 100;
     res += time->tv_usec / 100;
     return (res);
 }

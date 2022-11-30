@@ -6,7 +6,7 @@
 /*   By: yotsubo <yotsubo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 10:05:17 by yotsubo           #+#    #+#             */
-/*   Updated: 2022/11/30 13:45:53 by yotsubo          ###   ########.fr       */
+/*   Updated: 2022/11/30 16:47:26 by yotsubo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void init_env(int argc, char *argv[], t_env *env, t_time *time)
     env->time_to_eat = ph_atoi(argv[3]);
     env->time_to_sleep = ph_atoi(argv[4]);
     gettimeofday(time, NULL);
-    env->start_time = time;
+    env->start_time = adj_time_form(time);
     if (argc == ADDED_ARGS_NUM)
         env->must_eat_num = ph_atoi(argv[5]);
     else
@@ -55,47 +55,83 @@ static t_fork **init_forks(t_env *env)
     return (forks);
 }
 
-static t_philo *init_philos(t_env *env, t_fork **forks)
+static int init_member(t_env *env, t_philo **philos, t_fork **forks)
 {
-    t_philo *philos;
-    pthread_mutex_t msg_mutex;
-    pthread_mutex_t *sts_mutex;
     int i;
+    pthread_mutex_t *sts_mutex;
 
-    philos = (t_philo *)malloc(sizeof(t_philo) * env->num_of_philos);
+    sts_mutex = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t) * env->num_of_philos);
+    if (!sts_mutex)
+        return (MALLOC_ERROR);
+    i = 0;
+    while (i < env->num_of_philos)
+        pthread_mutex_init(&sts_mutex[i++], NULL);
+    while (i-- > 0)
+    {
+        if (i == 0)
+            philos[0]->left = forks[env->num_of_philos - 1];
+        else
+            philos[i]->left = forks[i - 1];
+        philos[i]->right = forks[i];
+        philos[i]->sts_mutex = &sts_mutex[i];
+        philos[i]->env = env;
+        philos[i]->num = i + 1;
+        philos[i]->msg_mutex = env->msg_mutex;
+        philos[i]->last_eat = env->start_time;
+        philos[i]->eat_times = 0;
+    }
+    return (0);
+}
+
+static t_philo **allc_philos(t_env *env)
+{
+    int i;
+    t_philo **philos;
+
+    philos = (t_philo **)malloc(sizeof(t_philo *) * env->num_of_philos);
     if (!philos)
         return (NULL);
-    sts_mutex =  (pthread_mutex_t *)malloc(sizeof(pthread_t) * env->num_of_philos);
-    if (!sts_mutex)
-    {
-        free(philos);
-        return (NULL);
-    }
-    pthread_mutex_init(&msg_mutex, NULL);
     i = 0;
     while (i < env->num_of_philos)
     {
-        if (i == 0)
+        philos[i] = (t_philo *)malloc(sizeof(t_philo));
+        if (!philos[i])
         {
-            philos[0].right = forks[0];
-            philos[0].left = forks[env->num_of_philos - 1];
+            while (i-- > 0)
+                free(philos[i]);
+            free(philos);
+            return (NULL);
         }
-        else
-        {
-            philos[i].right = forks[i];
-            philos[i].left = forks[i - 1];
-        }
-        philos[i].sts_mutex = &sts_mutex[i];
-        philos[i].env = env;
-        philos[i].num = i + 1;
-        philos[i].msg = msg;
-        philos[i].eat_times = 0;
         i++;
     }
     return (philos);
 }
 
-void init_philo_fork(t_env *env, t_philo *philos)
+static t_philo **init_philos(t_env *env, t_fork **forks)
+{
+    t_philo **philos;
+    pthread_mutex_t msg_mutex;
+    pthread_mutex_t *sts_mutex;
+
+    philos = allc_philos(env);
+    if (!philos)
+        return (NULL);
+    sts_mutex =  (pthread_mutex_t *)malloc(sizeof(pthread_t) * env->num_of_philos);
+    if (!sts_mutex)
+    {
+        free_philos(philos, env->num_of_philos);
+        return (NULL);
+    }
+    if (init_member(env, philos, forks) == MALLOC_ERROR)
+    {
+        destroy_sts(sts_mutex, env->num_of_philos);
+        free_philos(philos, env->num_of_philos);
+        return (NULL);
+    }
+    return (philos);
+}
+
+void init_philo_fork(t_env *env, t_philo **philos)
 {
     t_fork **forks;
 
