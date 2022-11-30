@@ -6,7 +6,7 @@
 /*   By: yotsubo <yotsubo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 10:05:17 by yotsubo           #+#    #+#             */
-/*   Updated: 2022/11/30 10:05:32 by yotsubo          ###   ########.fr       */
+/*   Updated: 2022/11/30 12:52:48 by yotsubo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,48 +22,66 @@ void init_env(int argc, char *argv[], t_env *env, t_time *time)
     env->start_time = time;
     if (argc == ADDED_ARGS_NUM)
         env->must_eat_num = ph_atoi(argv[5]);
+    else
+        env->must_eat_num = NOTSET;
 }
 
-static t_fork *init_forks(t_env *env)
+static t_fork **init_forks(t_env *env)
 {
-    t_fork *forks;
+    t_fork **forks;
     int i;
+    int j;
 
-    forks = (t_fork *)malloc(sizeof(t_fork) * env->num_of_philos);
+    forks = (t_fork **)malloc(sizeof(t_fork *) * env->num_of_philos);
     if (!forks)
         return (NULL);
     i = 0;
     while (i < env->num_of_philos)
     {
-        pthread_mutex_init(forks[i].fork, NULL);
-        i++;
+        forks[i] = (t_fork *)malloc(sizeof(t_fork));
+        if (!forks)
+        {
+            while (i-- > 0)
+                free(forks[i]);
+            break ;
+        }
+    }
+    j = 0;
+    while (j < env->num_of_philos)
+    {
+        pthread_mutex_init(forks[j]->fork, NULL);
+        j++;
     }
     return (forks);
 }
 
-static t_philo *init_philos(t_env *env, t_fork *forks)
+static t_philo *init_philos(t_env *env, t_fork **forks)
 {
     t_philo *philos;
+    pthread_mutex_t msg;
     int i;
 
     philos = (t_philo *)malloc(sizeof(t_philo) * env->num_of_philos);
     if (!philos)
         return (NULL);
+    pthread_mutex_init(&msg, NULL);
     i = 0;
     while (i < env->num_of_philos)
     {
         if (i == 0)
         {
-            philos[0].right = &forks[0];
-            philos[0].left = &forks[env->num_of_philos - 1];
+            philos[0].right = forks[0];
+            philos[0].left = forks[env->num_of_philos - 1];
         }
         else
         {
-            philos[i].right = &forks[i];
-            philos[i].left = &forks[i - 1];
+            philos[i].right = forks[i];
+            philos[i].left = forks[i - 1];
         }
         philos[i].env = env;
         philos[i].num = i + 1;
+        philos[i].msg = msg;
+        philos[i].eat_times = 0;
         i++;
     }
     return (philos);
@@ -71,7 +89,7 @@ static t_philo *init_philos(t_env *env, t_fork *forks)
 
 void init_philo_fork(t_env *env, t_philo *philos)
 {
-    t_fork *forks;
+    t_fork **forks;
 
     forks = init_forks(env);
     if (!forks)

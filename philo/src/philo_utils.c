@@ -1,27 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   philo_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yotsubo <yotsubo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/11/30 10:05:37 by yotsubo           #+#    #+#             */
-/*   Updated: 2022/11/30 10:54:37 by yotsubo          ###   ########.fr       */
+/*   Created: 2022/11/30 10:23:34 by yotsubo           #+#    #+#             */
+/*   Updated: 2022/11/30 10:30:48 by yotsubo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int main(int argc, char *argv[])
+long adj_time_form(t_time *time)
 {
-    t_env env;
-    t_philo *philos;
-    t_time time;
+    long res;
 
-    if (!(argc == MUST_ARGS_NUM || argc == ADDED_ARGS_NUM))
-        error_handler(ARGS_ERROR);
-    init_env(argc, argv, &env, &time);
-    philos = NULL;
-    init_philo_fork(&env, philos);
-    make_philos(&philos, env);
+    res = time->tvf_sec * 100;
+    res += time->tv_usec / 100;
+    return (res);
 }

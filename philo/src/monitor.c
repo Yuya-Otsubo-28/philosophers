@@ -1,37 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error.c                                            :+:      :+:    :+:   */
+/*   monitor.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yotsubo <yotsubo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/11/30 10:05:50 by yotsubo           #+#    #+#             */
-/*   Updated: 2022/11/30 10:53:17 by yotsubo          ###   ########.fr       */
+/*   Created: 2022/11/30 12:44:42 by yotsubo           #+#    #+#             */
+/*   Updated: 2022/11/30 12:56:41 by yotsubo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-#include <unistd.h>
 
-void destroy_forks(t_fork **forks, int num_of_forks)
+int judge_finish(t_env *env)
 {
     int i;
+    int ach_num;
 
+    ach_num = 0;
     i = 0;
-    while (i < num_of_forks)
+    while (i < env->num_of_philos)
     {
-        pthread_mutex_destroy(forks[i]->fork);
-        free(forks[i]);
+        if (env->philos[i]->status == DEAD)
+            return (FINISH);
+        if (env->must_eat_num != NOTSET)
+        {
+            if (env->philos[i]->eat_times == env->must_eat_num)
+                ach_num++;
+        }
         i++;
     }
-    free(forks);
-}
-
-int error_handler(int error_num)
-{
-    if (error_num == ARGS_ERROR)
-        ft_putstr_fd("*** ARGUMENT ERROR ***\n", STDERR_FILENO);
-    if (error_num == MALLOC_ERROR)
-        ft_putstr_fd("*** MALLOC ERROR ***\n", STDERR_FILENO);
-    return (-1);
+    if (ach_num == env->num_of_philos)
+        return (FINISH);
+    else
+        return (NOTFIN)
 }
