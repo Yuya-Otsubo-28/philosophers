@@ -23,32 +23,42 @@
 //     return (0);
 // }
 
-void *test(void *arg)
+// void *test(void *arg)
+// {
+//     pthread_t *th;
+
+//     th = (pthread_t *)arg;
+//     printf("hello\n");
+//     return (NULL);
+// }
+
+// int main()
+// {
+//     pthread_t *th;
+//     int i = 0;
+
+//     th = (pthread_t *)malloc(sizeof(pthread_t) * 3);
+//     while (i < 3)
+//     {
+//         pthread_create(&th[i], NULL, &test, &th[i]);
+//         printf("%d\n", i);
+//         i++;
+//     }
+//     i = 0;
+//     while (i < 3)
+//     {
+//         pthread_detach(th[i]);
+//         i++;
+//     }
+//     return (0);
+// }
+
+int main(void)
 {
-    pthread_t *th;
+    pthread_mutex_t *th;
 
-    th = (pthread_t *)arg;
-    printf("hello\n");
-    return (NULL);
-}
-
-int main()
-{
-    pthread_t *th;
-    int i = 0;
-
-    th = (pthread_t *)malloc(sizeof(pthread_t) * 3);
-    while (i < 3)
-    {
-        pthread_create(&th[i], NULL, &test, &th[i]);
-        printf("%d\n", i);
-        i++;
-    }
-    i = 0;
-    while (i < 3)
-    {
-        pthread_detach(th[i]);
-        i++;
-    }
-    return (0);
+    th = 
+    pthread_mutex_init(th, NULL);
+    pthread_mutex_lock(th);
+    free(th);
 }
