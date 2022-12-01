@@ -6,7 +6,7 @@
 #    By: yotsubo <yotsubo@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/30 10:05:26 by yotsubo           #+#    #+#              #
-#    Updated: 2022/11/30 17:04:15 by yotsubo          ###   ########.fr        #
+#    Updated: 2022/12/01 17:53:09 by yotsubo          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,10 @@ NAME = philo
 SRCS = 	src/main.c\
 		src/error.c\
 		src/init.c\
-		src/philo_utils.c
+		src/philo_utils.c\
+		src/make_philos.c\
+		src/monitor.c\
+		src/philo_event.c
 OBJDIR = ./obj
 OBJS = $(addprefix $(OBJDIR)/, $(SRCS:.c=.o))
 INCLUDE = -I ./include

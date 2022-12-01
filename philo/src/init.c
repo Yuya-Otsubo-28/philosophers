@@ -6,7 +6,7 @@
 /*   By: yotsubo <yotsubo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 10:05:17 by yotsubo           #+#    #+#             */
-/*   Updated: 2022/11/30 17:12:50 by yotsubo          ###   ########.fr       */
+/*   Updated: 2022/12/01 18:02:38 by yotsubo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ static t_fork **init_forks(t_env *env)
     int i;
     int j;
 
+    puts("hello");
     forks = (t_fork **)malloc(sizeof(t_fork *) * env->num_of_philos);
     if (!forks)
         return (NULL);
@@ -39,16 +40,19 @@ static t_fork **init_forks(t_env *env)
     while (i < env->num_of_philos)
     {
         forks[i] = (t_fork *)malloc(sizeof(t_fork));
-        if (!forks)
+        if (!forks[i])
         {
             while (i-- > 0)
                 free(forks[i]);
             break ;
         }
+        i++;
     }
+    puts("hello");
     j = 0;
     while (j < env->num_of_philos)
     {
+        puts("he");
         pthread_mutex_init(forks[j]->fork, NULL);
         j++;
     }
@@ -130,18 +134,22 @@ static t_philo **init_philos(t_env *env, t_fork **forks)
     return (philos);
 }
 
-void init_philo_fork(t_env *env, t_philo **philos)
+int init_philo_fork(t_env *env, t_philo **philos)
 {
     t_fork **forks;
 
+    puts("hello");
     forks = init_forks(env);
+    puts("hello");
     if (!forks)
-        error_handler(MALLOC_ERROR);
+        return(error_handler(MALLOC_ERROR));
     philos = init_philos(env, forks);
+    puts("hello");
     if (!philos)
     {
         destroy_forks(forks, env->num_of_philos);
-        error_handler(MALLOC_ERROR);
+        return (error_handler(MALLOC_ERROR));
     }
     env->philos = philos;
+    return (0);
 }

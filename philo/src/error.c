@@ -6,12 +6,11 @@
 /*   By: yotsubo <yotsubo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 10:05:50 by yotsubo           #+#    #+#             */
-/*   Updated: 2022/11/30 16:29:18 by yotsubo          ###   ########.fr       */
+/*   Updated: 2022/12/01 13:37:22 by yotsubo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-#include <unistd.h>
 
 void free_philos(t_philo **philos, int num_of_philos)
 {

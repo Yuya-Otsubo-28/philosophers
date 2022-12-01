@@ -6,7 +6,7 @@
 /*   By: yotsubo <yotsubo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 16:50:23 by yotsubo           #+#    #+#             */
-/*   Updated: 2022/11/30 17:37:59 by yotsubo          ###   ########.fr       */
+/*   Updated: 2022/12/01 17:41:41 by yotsubo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,17 +26,17 @@
 #define ARGS_ERROR 1
 #define MALLOC_ERROR 2
 
-#define SLEEP 0
-#define EAT 1
-#define TAKE 2
-#define THINK 3
+#define SLEEP 1
+#define EAT 2
+#define TAKE 3
+#define THINK 5
 #define DEAD 4
+#define FINISH 6
 
 #define RIGHT 1
 #define LEFT -1
 
-#define FINISH 1
-#define NOTFIN -1
+#define NOTFIN 0
 
 #define NOTSET -1
 
@@ -77,7 +77,7 @@ struct s_philo {
 /*     init.c      */
 /* * * * * * * * * */
 
-void init_philo_fork(t_env *env, t_philo **philo);
+int init_philo_fork(t_env *env, t_philo **philos);
 
 void init_env(int argc, char *argv[], t_env *env, t_time *time);
 
@@ -109,7 +109,7 @@ void destroy_forks(t_fork **forks, int num_of_forks);
 /*  make_philos.c  */
 /* * * * * * * * * */
 
-void make_philos(t_philo **philos, t_env *env);
+void event_start(t_philo **philos, t_env *env);
 
 /* * * * * * * * * */
 /*  philo_event.c  */
@@ -121,5 +121,5 @@ void *philo_event(void *arg);
 /* judge_finish.c  */
 /* * * * * * * * * */
 
-int judge_finish(t_env *env);
+void *monitor(void *arg);
 #endif
