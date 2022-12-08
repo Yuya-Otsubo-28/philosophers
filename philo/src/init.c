@@ -6,7 +6,7 @@
 /*   By: yotsubo <y.otsubo.886@ms.saitama-u.ac.j    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 10:05:17 by yotsubo           #+#    #+#             */
-/*   Updated: 2022/12/08 13:15:09 by yotsubo          ###   ########.fr       */
+/*   Updated: 2022/12/08 13:21:47 by yotsubo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,31 +29,28 @@ void init_env(int argc, char *argv[], t_env *env, t_time *time)
 static t_fork **init_forks(t_env *env)
 {
     t_fork **forks;
-    // int i;
+    int i;
     int j;
 
-    puts("hello");
     forks = (t_fork **)malloc(sizeof(t_fork *) * env->num_of_philos);
     if (!forks)
         return (NULL);
-    // i = 0;
-    // while (i < env->num_of_philos)
-    // {
-    //     forks[i] = (t_fork *)malloc(sizeof(t_fork));
-    //     if (!forks[i])
-    //     {
-    //         while (i-- > 0)
-    //             free(forks[i]);
-    //         break ;
-    //     }
-    //     i++;
-    // }
-    puts("hello");
+    i = 0;
+    while (i < env->num_of_philos)
+    {
+        forks[i] = (t_fork *)malloc(sizeof(t_fork));
+        if (!forks[i])
+        {
+            while (i-- > 0)
+                free(forks[i]);
+            break ;
+        }
+        i++;
+    }
     j = 0;
     while (j < env->num_of_philos)
     {
-        puts("he");
-        pthread_mutex_init(forks[j]->fork, NULL);
+        pthread_mutex_init(&forks[j]->fork, NULL);
         j++;
     }
     return (forks);

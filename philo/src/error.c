@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yotsubo <yotsubo@student.42.fr>            +#+  +:+       +#+        */
+/*   By: yotsubo <y.otsubo.886@ms.saitama-u.ac.j    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 10:05:50 by yotsubo           #+#    #+#             */
-/*   Updated: 2022/12/01 13:37:22 by yotsubo          ###   ########.fr       */
+/*   Updated: 2022/12/08 13:23:20 by yotsubo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void destroy_forks(t_fork **forks, int num_of_forks)
     i = 0;
     while (i < num_of_forks)
     {
-        pthread_mutex_destroy(forks[i]->fork);
+        pthread_mutex_destroy(&forks[i]->fork);
         free(forks[i]);
         i++;
     }

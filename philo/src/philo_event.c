@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo_event.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yotsubo <yotsubo@student.42.fr>            +#+  +:+       +#+        */
+/*   By: yotsubo <y.otsubo.886@ms.saitama-u.ac.j    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 13:30:41 by yotsubo           #+#    #+#             */
-/*   Updated: 2022/12/01 17:51:09 by yotsubo          ###   ########.fr       */
+/*   Updated: 2022/12/08 13:24:14 by yotsubo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,27 +59,27 @@ static int philo_odd(t_philo *philo)
     {
         if (dis_msg(philo, THINK) == FINISH)
             return (FINISH);
-        pthread_mutex_lock(philo->left->fork);
+        pthread_mutex_lock(&philo->left->fork);
         if (dis_msg(philo, TAKE) == FINISH)
         {
-            pthread_mutex_unlock(philo->left->fork);
+            pthread_mutex_unlock(&philo->left->fork);
             return (FINISH);
         }
-        pthread_mutex_lock(philo->right->fork);
+        pthread_mutex_lock(&philo->right->fork);
         if (dis_msg(philo, TAKE) == FINISH)
         {
-            pthread_mutex_unlock(philo->left->fork);
-            pthread_mutex_unlock(philo->right->fork);
+            pthread_mutex_unlock(&philo->left->fork);
+            pthread_mutex_unlock(&philo->right->fork);
             return (FINISH);
         }
         if (dis_msg(philo, EAT) == FINISH)
         {
-            pthread_mutex_unlock(philo->left->fork);
-            pthread_mutex_unlock(philo->right->fork);
+            pthread_mutex_unlock(&philo->left->fork);
+            pthread_mutex_unlock(&philo->right->fork);
             return (FINISH);
         }
-        pthread_mutex_unlock(philo->left->fork);
-        pthread_mutex_unlock(philo->right->fork);
+        pthread_mutex_unlock(&philo->left->fork);
+        pthread_mutex_unlock(&philo->right->fork);
         usleep(philo->env->time_to_eat);
         if (dis_msg(philo, SLEEP) == FINISH)
             return (FINISH);

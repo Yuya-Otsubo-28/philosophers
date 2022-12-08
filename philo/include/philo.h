@@ -6,7 +6,7 @@
 /*   By: yotsubo <y.otsubo.886@ms.saitama-u.ac.j    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 16:50:23 by yotsubo           #+#    #+#             */
-/*   Updated: 2022/12/08 13:13:45 by yotsubo          ###   ########.fr       */
+/*   Updated: 2022/12/08 13:17:20 by yotsubo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ struct s_env {
 };
 
 struct s_fork {
-    pthread_mutex_t *fork;
+    pthread_mutex_t fork;
 };
 
 struct s_philo {
