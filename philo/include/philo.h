@@ -6,7 +6,7 @@
 /*   By: yotsubo <y.otsubo.886@ms.saitama-u.ac.j    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 16:50:23 by yotsubo           #+#    #+#             */
-/*   Updated: 2022/12/08 13:17:20 by yotsubo          ###   ########.fr       */
+/*   Updated: 2022/12/08 13:52:00 by yotsubo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ struct s_philo {
 /*     init.c      */
 /* * * * * * * * * */
 
-int init_philo_fork(t_env *env, t_philo **philos);
+t_philo **init_philo_fork(t_env *env, t_philo **philos);
 
 void init_env(int argc, char *argv[], t_env *env, t_time *time);
 

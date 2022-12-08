@@ -6,7 +6,7 @@
 /*   By: yotsubo <y.otsubo.886@ms.saitama-u.ac.j    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 13:30:41 by yotsubo           #+#    #+#             */
-/*   Updated: 2022/12/08 13:26:52 by yotsubo          ###   ########.fr       */
+/*   Updated: 2022/12/08 13:39:08 by yotsubo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,7 +125,8 @@ void *philo_event(void *arg)
 {
     t_philo *philo;
 
-    philo = (t_philo *)arg;
+    puts("yeah");
+	philo = (t_philo *)arg;
     if (philo->num % 2 == 1)
         philo_odd(philo);
     else
