@@ -6,19 +6,19 @@
 /*   By: yotsubo <yotsubo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 10:23:34 by yotsubo           #+#    #+#             */
-/*   Updated: 2022/12/08 16:14:32 by yotsubo          ###   ########.fr       */
+/*   Updated: 2022/12/12 16:26:39 by yotsubo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-long adj_time_form(t_time *time)
+long	adj_time_form(t_time *time)
 {
-    long res;
+	long	res;
 
-    res = time->tv_sec * 1000;
-    res += time->tv_usec / 1000;
-    return (res);
+	res = time->tv_sec * 1000;
+	res += time->tv_usec / 1000;
+	return (res);
 }
 
 void	ft_putstr_fd(char *s, int fd)
@@ -77,9 +77,9 @@ static long	ft_atol(const char *str)
 	return (res * flag);
 }
 
-int ph_atoi(const char *str)
+int	ph_atoi(const char *str)
 {
-	long tmp;
+	long	tmp;
 
 	tmp = ft_atol(str);
 	if (tmp < 0 || tmp > INT_MAX)
