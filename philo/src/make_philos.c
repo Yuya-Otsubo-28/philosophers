@@ -6,7 +6,7 @@
 /*   By: yotsubo <y.otsubo.886@ms.saitama-u.ac.j    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 10:11:01 by yotsubo           #+#    #+#             */
-/*   Updated: 2022/12/08 13:39:45 by yotsubo          ###   ########.fr       */
+/*   Updated: 2022/12/08 14:42:15 by yotsubo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,13 +23,8 @@ void event_start(t_philo **philos, t_env *env)
         return ;
     */
     i = -1;
-	puts("hello");
     while (++i < env->num_of_philos)
-    {
-        printf("&th[i] ; %p\n", philos[i]);
         pthread_create(&th[i], NULL, &philo_event, philos[i]);
-        printf("i ; %d\n", i);
-    }
     pthread_create(&th[i], NULL, &monitor, env);
     pthread_join(th[i], NULL);
 }

@@ -6,7 +6,7 @@
 /*   By: yotsubo <y.otsubo.886@ms.saitama-u.ac.j    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 13:30:41 by yotsubo           #+#    #+#             */
-/*   Updated: 2022/12/08 13:39:08 by yotsubo          ###   ########.fr       */
+/*   Updated: 2022/12/08 16:42:41 by yotsubo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,6 @@ static int judge_msg(t_philo *philo, int status, long dis_time)
     }
     else if (status == THINK)
         printf("%ld %d is thinking\n", dis_time, philo->num);
-    else if (status == DEAD)
-        printf("%ld %d died\n", dis_time, philo->num);
     return (NOTFIN);
 }
 
@@ -38,15 +36,10 @@ static int dis_msg(t_philo *philo, int status)
     int finornot;
     long dis_time;
 
+    pthread_mutex_lock(philo->sts_mutex);
+    pthread_mutex_lock(philo->msg_mutex);
     gettimeofday(&time, NULL);
     dis_time = adj_time_form(&time);
-    pthread_mutex_lock(philo->sts_mutex);
-    if (dis_time - philo->last_eat > philo->env->time_to_die)
-    {
-        dis_time = philo->last_eat + philo->env->time_to_die;
-        philo->status = DEAD;
-    }
-    pthread_mutex_lock(philo->msg_mutex);
     finornot = judge_msg(philo, status, dis_time);
     pthread_mutex_unlock(philo->msg_mutex);
     pthread_mutex_unlock(philo->sts_mutex);
@@ -78,12 +71,12 @@ static int philo_odd(t_philo *philo)
             pthread_mutex_unlock(&philo->right->fork);
             return (FINISH);
         }
+		usleep(philo->env->time_to_eat * 1000);
         pthread_mutex_unlock(&philo->left->fork);
         pthread_mutex_unlock(&philo->right->fork);
-        usleep(philo->env->time_to_eat);
         if (dis_msg(philo, SLEEP) == FINISH)
             return (FINISH);
-        usleep(philo->env->time_to_sleep);
+        usleep(philo->env->time_to_sleep * 1000);
     }
 }
 
@@ -112,12 +105,12 @@ static int philo_even(t_philo *philo)
             pthread_mutex_unlock(&philo->right->fork);
             return (FINISH);
         }
+		usleep(philo->env->time_to_eat * 1000);
         pthread_mutex_unlock(&philo->left->fork);
         pthread_mutex_unlock(&philo->right->fork);
-        usleep(philo->env->time_to_eat);
         if (dis_msg(philo, SLEEP) == FINISH)
             return (FINISH);
-        usleep(philo->env->time_to_sleep);
+        usleep(philo->env->time_to_sleep * 1000);
     }
 }
 
@@ -125,7 +118,6 @@ void *philo_event(void *arg)
 {
     t_philo *philo;
 
-    puts("yeah");
 	philo = (t_philo *)arg;
     if (philo->num % 2 == 1)
         philo_odd(philo);
