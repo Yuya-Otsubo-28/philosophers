@@ -6,7 +6,7 @@
 /*   By: yotsubo <yotsubo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 16:50:23 by yotsubo           #+#    #+#             */
-/*   Updated: 2022/12/12 09:23:56 by yotsubo          ###   ########.fr       */
+/*   Updated: 2022/12/12 13:18:28 by yotsubo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 #include <sys/time.h>
 #include <pthread.h>
 #include <limits.h>
+#include <errno.h>
 
 #define MUST_ARGS_NUM 5
 #define ADDED_ARGS_NUM 6
@@ -54,7 +55,9 @@ struct s_env {
     long start_time;
     t_philo **philos;
     t_fork **forks;
+    pthread_t *th;
     pthread_mutex_t *msg_mutex;
+    pthread_mutex_t *env_mutex;
 };
 
 struct s_fork {

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yotsubo <y.otsubo.886@ms.saitama-u.ac.j    +#+  +:+       +#+        */
+/*   By: yotsubo <yotsubo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 10:05:17 by yotsubo           #+#    #+#             */
-/*   Updated: 2022/12/08 15:28:26 by yotsubo          ###   ########.fr       */
+/*   Updated: 2022/12/12 13:30:01 by yotsubo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,10 @@ void init_env(int argc, char *argv[], t_env *env, t_time *time)
         env->must_eat_num = ph_atoi(argv[5]);
     else
         env->must_eat_num = NOTSET;
+    env->env_mutex = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t));
+    if (!env->env_mutex)
+        return ;
+    pthread_mutex_init(env->env_mutex, NULL);
 }
 
 static t_fork **init_forks(t_env *env)
