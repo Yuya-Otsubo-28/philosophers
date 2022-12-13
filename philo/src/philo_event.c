@@ -6,7 +6,7 @@
 /*   By: yotsubo <yotsubo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 13:30:41 by yotsubo           #+#    #+#             */
-/*   Updated: 2022/12/12 16:25:34 by yotsubo          ###   ########.fr       */
+/*   Updated: 2022/12/13 18:00:08 by yotsubo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,6 @@ static int	dis_msg(t_philo *philo, int status)
 	int		finornot;
 	long	dis_time;
 
-	finornot = FINISH;
 	pthread_mutex_lock(philo->msg_mutex);
 	gettimeofday(&time, NULL);
 	dis_time = adj_time_form(&time);
@@ -59,7 +58,7 @@ static int	philo_odd(t_philo *philo)
 	{
 		if (dis_msg(philo, THINK) == FINISH)
 			return (FINISH);
-		usleep(200);
+		usleep(500);
 		pthread_mutex_lock(&philo->left->fork);
 		if (dis_msg(philo, TAKE) == FINISH)
 		{
@@ -80,8 +79,8 @@ static int	philo_odd(t_philo *philo)
 			return (FINISH);
 		}
 		usleep(time_to_eat * 1000);
-		pthread_mutex_unlock(&philo->left->fork);
 		pthread_mutex_unlock(&philo->right->fork);
+		pthread_mutex_unlock(&philo->left->fork);
 		if (dis_msg(philo, SLEEP) == FINISH)
 			return (FINISH);
 		usleep(time_to_sleep * 1000);
@@ -99,7 +98,7 @@ static int	philo_even(t_philo *philo)
 	{
 		if (dis_msg(philo, THINK) == FINISH)
 			return (FINISH);
-		usleep(150);
+		usleep(500);
 		pthread_mutex_lock(&philo->right->fork);
 		if (dis_msg(philo, TAKE) == FINISH)
 		{
@@ -134,7 +133,10 @@ void	*philo_event(void *arg)
 
 	philo = (t_philo *)arg;
 	if (philo->num % 2 == 1)
+	{
+		usleep(500);
 		philo_odd(philo);
+	}
 	else
 		philo_even(philo);
 	return (NULL);

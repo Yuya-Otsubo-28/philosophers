@@ -6,7 +6,7 @@
 /*   By: yotsubo <yotsubo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 12:44:42 by yotsubo           #+#    #+#             */
-/*   Updated: 2022/12/12 16:20:37 by yotsubo          ###   ########.fr       */
+/*   Updated: 2022/12/13 15:55:21 by yotsubo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ void	*monitor(void *arg)
 			if (now - env->philos[i]->last_eat > env->time_to_die)
 			{
 				pthread_mutex_lock(env->philos[i]->msg_mutex);
-				printf("%ld %d is dead\n", now, env->philos[i]->num);
+				printf("%ld %d died\n", now, env->philos[i]->num);
 				env->philos[i]->status = DEAD;
 				set_fin_philos(env);
 				pthread_mutex_unlock(env->philos[i]->msg_mutex);
