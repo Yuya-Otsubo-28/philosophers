@@ -6,7 +6,7 @@
 /*   By: yotsubo <yotsubo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 10:23:34 by yotsubo           #+#    #+#             */
-/*   Updated: 2022/12/12 16:26:39 by yotsubo          ###   ########.fr       */
+/*   Updated: 2022/12/14 16:01:46 by yotsubo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ static long	ft_atol(const char *str)
 		if (str[i++] == '-')
 			flag *= -1;
 	if (!(str[i] >= '0' && str[i] <= '9'))
-		return (0);
+		return (NOTSET);
 	while (str[i] >= '0' && str[i] <= '9')
 	{
 		res *= 10;
@@ -73,7 +73,7 @@ static long	ft_atol(const char *str)
 		i++;
 	}
 	if (str[i] != '\0')
-		return (0);
+		return (NOTSET);
 	return (res * flag);
 }
 
@@ -82,7 +82,7 @@ int	ph_atoi(const char *str)
 	long	tmp;
 
 	tmp = ft_atol(str);
-	if (tmp < 0 || tmp > INT_MAX)
-		error_handler(ARGS_ERROR);
+	if (tmp == NOTSET || tmp <= 0 || tmp > INT_MAX)
+		return (NOTSET);
 	return ((int)tmp);
 }

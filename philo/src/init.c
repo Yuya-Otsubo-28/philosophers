@@ -6,28 +6,37 @@
 /*   By: yotsubo <yotsubo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 10:05:17 by yotsubo           #+#    #+#             */
-/*   Updated: 2022/12/12 16:14:29 by yotsubo          ###   ########.fr       */
+/*   Updated: 2022/12/14 15:55:25 by yotsubo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	init_env(int argc, char *argv[], t_env *env, t_time *time)
+int	init_env(int argc, char *argv[], t_env *env, t_time *time)
 {
 	env->num_of_philos = ph_atoi(argv[1]);
 	env->time_to_die = ph_atoi(argv[2]);
 	env->time_to_eat = ph_atoi(argv[3]);
 	env->time_to_sleep = ph_atoi(argv[4]);
-	gettimeofday(time, NULL);
+	if (env->num_of_philos == NOTSET || env->time_to_die == NOTSET
+		|| env->time_to_eat == NOTSET || env->time_to_sleep == NOTSET)
+		return (ARGS_ERROR);
+	if (gettimeofday(time, NULL) == -1)
+		return (ARGS_ERROR);
 	env->start_time = adj_time_form(time);
 	if (argc == ADDED_ARGS_NUM)
+	{
 		env->must_eat_num = ph_atoi(argv[5]);
+		if (env->must_eat_num == NOTSET)
+			return (ARGS_ERROR);
+	}
 	else
 		env->must_eat_num = NOTSET;
 	env->env_mutex = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t));
 	if (!env->env_mutex)
-		return ;
+		return (MALLOC_ERROR);
 	pthread_mutex_init(env->env_mutex, NULL);
+	return (0);
 }
 
 static t_fork	**init_forks(t_env *env)

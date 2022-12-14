@@ -6,7 +6,7 @@
 /*   By: yotsubo <yotsubo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 16:50:23 by yotsubo           #+#    #+#             */
-/*   Updated: 2022/12/12 16:00:35 by yotsubo          ###   ########.fr       */
+/*   Updated: 2022/12/14 15:54:12 by yotsubo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ struct s_philo {
 
 t_philo	**init_philo_fork(t_env *env, t_philo **philos);
 
-void	init_env(int argc, char *argv[], t_env *env, t_time *time);
+int		init_env(int argc, char *argv[], t_env *env, t_time *time);
 
 /* * * * * * * * * */
 /*  philo_utils.c  */
@@ -125,4 +125,10 @@ void	*philo_event(void *arg);
 /* * * * * * * * * */
 
 void	*monitor(void *arg);
+
+/* * * * * * * * * */
+/* judge_finish.c  */
+/* * * * * * * * * */
+
+int		dis_msg(t_philo *philo, int status);
 #endif

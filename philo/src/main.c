@@ -6,7 +6,7 @@
 /*   By: yotsubo <yotsubo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 10:05:37 by yotsubo           #+#    #+#             */
-/*   Updated: 2022/12/12 16:06:47 by yotsubo          ###   ########.fr       */
+/*   Updated: 2022/12/14 15:58:59 by yotsubo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 int	main(int argc, char *argv[])
 {
+	int				func_return;
 	t_env			*env;
 	t_philo			**philos;
 	t_time			time;
@@ -24,7 +25,9 @@ int	main(int argc, char *argv[])
 	env = (t_env *)malloc(sizeof(t_env));
 	if (!env)
 		return (error_handler(MALLOC_ERROR));
-	init_env(argc, argv, env, &time);
+	func_return = init_env(argc, argv, env, &time);
+	if (func_return)
+		return (error_handler(func_return));
 	pthread_mutex_init(&msg_mutex, NULL);
 	env->msg_mutex = &msg_mutex;
 	philos = NULL;
