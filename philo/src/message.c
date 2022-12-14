@@ -6,7 +6,7 @@
 /*   By: yotsubo <yotsubo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/14 15:43:24 by yotsubo           #+#    #+#             */
-/*   Updated: 2022/12/14 15:45:31 by yotsubo          ###   ########.fr       */
+/*   Updated: 2022/12/15 07:58:10 by yotsubo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,6 @@ int	dis_msg(t_philo *philo, int status)
 	gettimeofday(&time, NULL);
 	dis_time = adj_time_form(&time);
 	finornot = judge_msg(philo, status, dis_time);
-	pthread_mutex_unlock(philo->msg_mutex);
+	pthread_mutex_unlock(philo->msg_mutex); 
 	return (finornot);
 }

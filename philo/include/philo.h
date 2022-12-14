@@ -6,7 +6,7 @@
 /*   By: yotsubo <yotsubo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 16:50:23 by yotsubo           #+#    #+#             */
-/*   Updated: 2022/12/15 01:52:20 by yotsubo          ###   ########.fr       */
+/*   Updated: 2022/12/15 07:22:31 by yotsubo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,8 +65,8 @@ struct s_env {
 	t_philo			**philos;
 	t_fork			**forks;
 	pthread_t		*th;
-	pthread_mutex_t	*env_mutex;
 	pthread_mutex_t	*msg_mutex;
+	pthread_mutex_t	*sts_mutexs;
 };
 
 struct s_fork {
@@ -80,6 +80,7 @@ struct s_philo {
 	long			last_eat;
 	pthread_mutex_t	*msg_mutex;
 	pthread_mutex_t	*sts_mutex;
+	pthread_mutex_t	et_mutex;
 	int				status;
 	int				num;
 	int				eat_times;

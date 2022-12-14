@@ -6,7 +6,7 @@
 /*   By: yotsubo <yotsubo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 10:05:17 by yotsubo           #+#    #+#             */
-/*   Updated: 2022/12/15 03:13:16 by yotsubo          ###   ########.fr       */
+/*   Updated: 2022/12/15 07:22:07 by yotsubo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,16 +15,11 @@
 static int	env_mutex_init(t_env *env)
 {
 	pthread_mutex_t	*msg_mutex;
-	pthread_mutex_t	*env_mutex;
 
 	msg_mutex = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t));
 	if (!msg_mutex)
 		return (MALLOC_ERROR);
-	env_mutex = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t));
-	if (!env_mutex)
-		return (MALLOC_ERROR);
 	env->msg_mutex = msg_mutex;
-	env->env_mutex = env_mutex;
 	return (0);
 }
 
@@ -83,14 +78,10 @@ static t_fork	**init_forks(t_env *env)
 	return (forks);
 }
 
-static int	init_member(t_env *env, t_philo **philos, t_fork **forks)
+static int	init_member(t_env *env, t_philo **philos, t_fork **forks, pthread_mutex_t *sts_mutex)
 {
 	int				i;
-	pthread_mutex_t	*sts_mutex;
 
-	sts_mutex = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t) * env->num_of_philos);
-	if (!sts_mutex)
-		return (MALLOC_ERROR);
 	i = 0;
 	while (i < env->num_of_philos)
 		pthread_mutex_init(&sts_mutex[i++], NULL);
@@ -150,12 +141,13 @@ static t_philo	**init_philos(t_env *env, t_fork **forks)
 		free_philos(philos, env->num_of_philos);
 		return (NULL);
 	}
-	if (init_member(env, philos, forks) == MALLOC_ERROR)
+	if (init_member(env, philos, forks, sts_mutex))
 	{
 		destroy_sts(sts_mutex, env->num_of_philos);
 		free_philos(philos, env->num_of_philos);
 		return (NULL);
 	}
+	env->sts_mutexs = sts_mutex;
 	return (philos);
 }
 

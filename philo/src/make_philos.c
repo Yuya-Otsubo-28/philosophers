@@ -6,14 +6,12 @@
 /*   By: yotsubo <yotsubo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 10:11:01 by yotsubo           #+#    #+#             */
-/*   Updated: 2022/12/14 23:53:55 by yotsubo          ###   ########.fr       */
+/*   Updated: 2022/12/15 07:03:12 by yotsubo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-/*
-* thのallocate失敗のチェックをしっかり入れておく
-*/
+
 int	event_start(t_philo **philos, t_env *env)
 {
 	int	i;

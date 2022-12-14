@@ -6,13 +6,40 @@
 /*   By: yotsubo <yotsubo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 13:30:41 by yotsubo           #+#    #+#             */
-/*   Updated: 2022/12/15 02:01:23 by yotsubo          ###   ########.fr       */
+/*   Updated: 2022/12/15 08:04:07 by yotsubo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-static int	take_forks_and_eat(t_philo *philo, long time_to_eat)
+static int	take_forks_and_eat_e(t_philo *philo, long time_to_eat)
+{
+	pthread_mutex_lock(&philo->right->fork);
+	if (dis_msg(philo, TAKE) == FINISH)
+	{
+		pthread_mutex_unlock(&philo->right->fork);
+		return (FINISH);
+	}
+	pthread_mutex_lock(&philo->left->fork);
+	if (dis_msg(philo, TAKE) == FINISH)
+	{
+		pthread_mutex_unlock(&philo->right->fork);
+		pthread_mutex_unlock(&philo->left->fork);
+		return (FINISH);
+	}
+	if (dis_msg(philo, EAT) == FINISH)
+	{
+		pthread_mutex_unlock(&philo->right->fork);
+		pthread_mutex_unlock(&philo->left->fork);
+		return (FINISH);
+	}
+	usleep(time_to_eat * 1000);
+	pthread_mutex_unlock(&philo->left->fork);
+	pthread_mutex_unlock(&philo->right->fork);
+	return (0);
+}
+
+static int	take_forks_and_eat_o(t_philo *philo, long time_to_eat)
 {
 	pthread_mutex_lock(&philo->left->fork);
 	if (dis_msg(philo, TAKE) == FINISH)
@@ -50,10 +77,8 @@ static int	philo_odd(t_philo *philo)
 	{
 		if (dis_msg(philo, THINK) == FINISH)
 			return (FINISH);
-		pthread_mutex_lock(philo->env->env_mutex);
 		usleep((philo->env->time_to_die - time_to_eat - time_to_sleep) * 10);
-		pthread_mutex_unlock(philo->env->env_mutex);
-		if (take_forks_and_eat(philo, time_to_eat) == FINISH)
+		if (take_forks_and_eat_o(philo, time_to_eat) == FINISH)
 			return (FINISH);
 		if (dis_msg(philo, SLEEP) == FINISH)
 			return (FINISH);
@@ -72,10 +97,8 @@ static int	philo_even(t_philo *philo)
 	{
 		if (dis_msg(philo, THINK) == FINISH)
 			return (FINISH);
-		pthread_mutex_lock(philo->env->env_mutex);
 		usleep((philo->env->time_to_die - time_to_eat - time_to_sleep) * 10);
-		pthread_mutex_unlock(philo->env->env_mutex);
-		if (take_forks_and_eat(philo, time_to_eat) == FINISH)
+		if (take_forks_and_eat_e(philo, time_to_eat) == FINISH)
 			return (FINISH);
 		if (dis_msg(philo, SLEEP) == FINISH)
 			return (FINISH);
@@ -90,7 +113,7 @@ void	*philo_event(void *arg)
 	philo = (t_philo *)arg;
 	if (philo->num % 2 == 1)
 	{
-		usleep(500);
+		usleep(1000);
 		philo_odd(philo);
 	}
 	else

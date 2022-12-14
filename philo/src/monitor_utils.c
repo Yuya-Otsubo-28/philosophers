@@ -6,7 +6,7 @@
 /*   By: yotsubo <yotsubo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/14 22:41:53 by yotsubo           #+#    #+#             */
-/*   Updated: 2022/12/15 03:10:06 by yotsubo          ###   ########.fr       */
+/*   Updated: 2022/12/15 07:00:53 by yotsubo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,9 @@ void	*set_fin_philos(t_env *env)
 	i = 0;
 	while (i < env->num_of_philos)
 	{
+		pthread_mutex_lock(env->philos[i]->sts_mutex);
 		env->philos[i]->status = FINISH;
+		pthread_mutex_unlock(env->philos[i]->sts_mutex);
 		i++;
 	}
 	return (NULL);
