@@ -6,7 +6,7 @@
 /*   By: yotsubo <yotsubo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 10:11:01 by yotsubo           #+#    #+#             */
-/*   Updated: 2022/12/12 16:16:08 by yotsubo          ###   ########.fr       */
+/*   Updated: 2022/12/14 23:53:55 by yotsubo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,30 @@
 /*
 * thのallocate失敗のチェックをしっかり入れておく
 */
-void	event_start(t_philo **philos, t_env *env)
+int	event_start(t_philo **philos, t_env *env)
 {
 	int	i;
 
-	env->th = (pthread_t *)malloc(sizeof(pthread_t) * env->num_of_philos);
+	env->th = (pthread_t *)malloc(sizeof(pthread_t) * (env->num_of_philos + 1));
+	if (!env->th)
+		return (MALLOC_ERROR);
 	i = -1;
 	while (++i < env->num_of_philos)
-		pthread_create(&env->th[i], NULL, &philo_event, philos[i]);
-	pthread_create(&env->th[i], NULL, &monitor, env);
-	pthread_join(env->th[i], NULL);
+	{
+		if (pthread_create(&env->th[i], NULL, &philo_event, philos[i]))
+		{
+			error_handler(PTHREAD_ERROR);
+			return (PTHREAD_ERROR);
+		}
+		if (pthread_detach(env->th[i]))
+		{
+			error_handler(PTHREAD_ERROR);
+			return (PTHREAD_ERROR);
+		}
+	}
+	if (pthread_create(&env->th[i], NULL, &monitor, env))
+		return (PTHREAD_ERROR);
+	if (pthread_join(env->th[i], NULL))
+		return (PTHREAD_ERROR);
+	return (0);
 }

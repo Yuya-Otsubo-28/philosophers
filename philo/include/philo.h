@@ -6,7 +6,7 @@
 /*   By: yotsubo <yotsubo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 16:50:23 by yotsubo           #+#    #+#             */
-/*   Updated: 2022/12/14 15:54:12 by yotsubo          ###   ########.fr       */
+/*   Updated: 2022/12/15 01:52:20 by yotsubo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@
 
 # define ARGS_ERROR 1
 # define MALLOC_ERROR 2
+# define TIME_ERROR 3
+# define PTHREAD_ERROR 4
 
 # define SLEEP 1
 # define EAT 2
@@ -36,6 +38,13 @@
 
 # define RIGHT 1
 # define LEFT -1
+
+# define ALL 1
+# define ONLY_ENV 2
+# define FORKS 3
+# define PHILOS_AND_FROKS 4
+# define PHILOS 5
+# define THREAD 6
 
 # define NOTFIN 0
 
@@ -56,8 +65,8 @@ struct s_env {
 	t_philo			**philos;
 	t_fork			**forks;
 	pthread_t		*th;
-	pthread_mutex_t	*msg_mutex;
 	pthread_mutex_t	*env_mutex;
+	pthread_mutex_t	*msg_mutex;
 };
 
 struct s_fork {
@@ -108,11 +117,13 @@ void	destroy_sts(pthread_mutex_t *sts_mutex, int num_of_philos);
 
 void	destroy_forks(t_fork **forks, int num_of_forks);
 
+void	*free_env(t_env *env, int free_status);
+
 /* * * * * * * * * */
 /*  make_philos.c  */
 /* * * * * * * * * */
 
-void	event_start(t_philo **philos, t_env *env);
+int		event_start(t_philo **philos, t_env *env);
 
 /* * * * * * * * * */
 /*  philo_event.c  */
@@ -131,4 +142,15 @@ void	*monitor(void *arg);
 /* * * * * * * * * */
 
 int		dis_msg(t_philo *philo, int status);
+
+/* * * * * * * * * */
+/* judge_finish.c  */
+/* * * * * * * * * */
+
+void	*set_fin_philos(t_env *env);
+
+void	unlock_all_sts(t_env *env);
+
+void	lock_all_sts(t_env *env);
+
 #endif

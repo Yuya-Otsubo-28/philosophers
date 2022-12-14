@@ -6,7 +6,7 @@
 /*   By: yotsubo <yotsubo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 13:30:41 by yotsubo           #+#    #+#             */
-/*   Updated: 2022/12/14 15:44:17 by yotsubo          ###   ########.fr       */
+/*   Updated: 2022/12/15 02:01:23 by yotsubo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,9 @@ static int	philo_odd(t_philo *philo)
 	{
 		if (dis_msg(philo, THINK) == FINISH)
 			return (FINISH);
+		pthread_mutex_lock(philo->env->env_mutex);
 		usleep((philo->env->time_to_die - time_to_eat - time_to_sleep) * 10);
+		pthread_mutex_unlock(philo->env->env_mutex);
 		if (take_forks_and_eat(philo, time_to_eat) == FINISH)
 			return (FINISH);
 		if (dis_msg(philo, SLEEP) == FINISH)
@@ -70,7 +72,9 @@ static int	philo_even(t_philo *philo)
 	{
 		if (dis_msg(philo, THINK) == FINISH)
 			return (FINISH);
+		pthread_mutex_lock(philo->env->env_mutex);
 		usleep((philo->env->time_to_die - time_to_eat - time_to_sleep) * 10);
+		pthread_mutex_unlock(philo->env->env_mutex);
 		if (take_forks_and_eat(philo, time_to_eat) == FINISH)
 			return (FINISH);
 		if (dis_msg(philo, SLEEP) == FINISH)

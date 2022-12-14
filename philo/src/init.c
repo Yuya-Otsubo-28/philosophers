@@ -6,11 +6,27 @@
 /*   By: yotsubo <yotsubo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 10:05:17 by yotsubo           #+#    #+#             */
-/*   Updated: 2022/12/14 15:55:25 by yotsubo          ###   ########.fr       */
+/*   Updated: 2022/12/15 03:13:16 by yotsubo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+static int	env_mutex_init(t_env *env)
+{
+	pthread_mutex_t	*msg_mutex;
+	pthread_mutex_t	*env_mutex;
+
+	msg_mutex = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t));
+	if (!msg_mutex)
+		return (MALLOC_ERROR);
+	env_mutex = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t));
+	if (!env_mutex)
+		return (MALLOC_ERROR);
+	env->msg_mutex = msg_mutex;
+	env->env_mutex = env_mutex;
+	return (0);
+}
 
 int	init_env(int argc, char *argv[], t_env *env, t_time *time)
 {
@@ -22,7 +38,7 @@ int	init_env(int argc, char *argv[], t_env *env, t_time *time)
 		|| env->time_to_eat == NOTSET || env->time_to_sleep == NOTSET)
 		return (ARGS_ERROR);
 	if (gettimeofday(time, NULL) == -1)
-		return (ARGS_ERROR);
+		return (TIME_ERROR);
 	env->start_time = adj_time_form(time);
 	if (argc == ADDED_ARGS_NUM)
 	{
@@ -32,11 +48,9 @@ int	init_env(int argc, char *argv[], t_env *env, t_time *time)
 	}
 	else
 		env->must_eat_num = NOTSET;
-	env->env_mutex = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t));
-	if (!env->env_mutex)
-		return (MALLOC_ERROR);
-	pthread_mutex_init(env->env_mutex, NULL);
-	return (0);
+	env->philos = NULL;
+	env->th = NULL;
+	return (env_mutex_init(env));
 }
 
 static t_fork	**init_forks(t_env *env)
@@ -61,7 +75,7 @@ static t_fork	**init_forks(t_env *env)
 		i++;
 	}
 	j = 0;
-	while (j < env->num_of_philos)
+	while (i != 0 && j < env->num_of_philos)
 	{
 		pthread_mutex_init(&forks[j]->fork, NULL);
 		j++;
@@ -162,6 +176,5 @@ t_philo	**init_philo_fork(t_env *env, t_philo **philos)
 		error_handler(MALLOC_ERROR);
 		return (NULL);
 	}
-	env->philos = philos;
 	return (philos);
 }
