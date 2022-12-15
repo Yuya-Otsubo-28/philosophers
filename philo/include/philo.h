@@ -6,7 +6,7 @@
 /*   By: yotsubo <yotsubo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 16:50:23 by yotsubo           #+#    #+#             */
-/*   Updated: 2022/12/15 09:09:41 by yotsubo          ###   ########.fr       */
+/*   Updated: 2022/12/15 10:22:29 by yotsubo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,5 +151,10 @@ void	*set_fin_philos(t_env *env);
 void	unlock_all_sts(t_env *env);
 
 void	lock_all_sts(t_env *env);
+
+int		init_member(t_env *env, t_philo **philos,
+			t_fork **forks, pthread_mutex_t *sts_mutex);
+
+int		env_mutex_init(t_env *env);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: yotsubo <yotsubo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 13:30:41 by yotsubo           #+#    #+#             */
-/*   Updated: 2022/12/15 09:30:45 by yotsubo          ###   ########.fr       */
+/*   Updated: 2022/12/15 12:58:57 by yotsubo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,6 @@ void	*philo_event(void *arg)
 	t_philo			*philo;
 
 	philo = (t_philo *)arg;
-	pthread_mutex_unlock(philo->sts_mutex);
 	if (philo->num % 2 == 1)
 	{
 		usleep(500);

@@ -6,7 +6,7 @@
 #    By: yotsubo <yotsubo@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/30 10:05:26 by yotsubo           #+#    #+#              #
-#    Updated: 2022/12/15 09:32:50 by yotsubo          ###   ########.fr        #
+#    Updated: 2022/12/15 13:01:12 by yotsubo          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,12 +20,13 @@ SRCS = 	src/main.c\
 		src/philo_event.c\
 		src/message.c\
 		src/free.c\
-		src/monitor_utils.c
+		src/monitor_utils.c\
+		src/init_utils.c
 OBJDIR = ./obj
 OBJS = $(addprefix $(OBJDIR)/, $(SRCS:.c=.o))
 INCLUDE = -I ./include
 CC	= cc
-CFLAGS = -Wall -Wextra -Werror -g  -fsanitize=address #-fsanitize=thread
+CFLAGS = -Wall -Wextra -Werror -fsanitize=thread
 
 all : $(NAME)
 
