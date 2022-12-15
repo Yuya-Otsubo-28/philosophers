@@ -6,7 +6,7 @@
 /*   By: yotsubo <yotsubo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/14 18:42:43 by yotsubo           #+#    #+#             */
-/*   Updated: 2022/12/15 07:21:38 by yotsubo          ###   ########.fr       */
+/*   Updated: 2022/12/15 09:31:56 by yotsubo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,35 +32,32 @@ void	destroy_sts(pthread_mutex_t *sts_mutex, int num_of_philos)
 	free(sts_mutex);
 }
 
-void	destroy_forks(t_fork **forks, int num_of_forks)
+void	destroy_forks(t_env *env, int num_of_forks)
 {
 	int	i;
 
 	i = 0;
 	while (i < num_of_forks)
 	{
-		pthread_mutex_destroy(&forks[i]->fork);
-		free(forks[i]);
+		pthread_mutex_destroy(&env->forks[i]->fork);
+		free(env->forks[i]);
 		i++;
 	}
-	free(forks);
+	free(env->forks);
 }
 
 void	*free_env(t_env *env, int free_status)
 {
-	if (free_status == FORKS || free_status == ALL)
-	if (free_status == PHILOS_AND_FROKS)
+	if (free_status == PHILOS_AND_FROKS || free_status == ALL)
 	{
 		free_philos(env->philos, env->num_of_philos);
-		destroy_forks(env->forks, env->num_of_philos);
+		destroy_forks(env, env->num_of_philos);
 	}
-	if (free_status == PHILOS || free_status == ALL)
-		free_philos(env->philos, env->num_of_philos);
-	if (free_status == THREAD || free_status == ALL)
+	if (free_status == ALL)
 		free(env->th);
 	pthread_mutex_destroy(env->msg_mutex);
 	free(env->msg_mutex);
+	destroy_sts(env->sts_mutexs, env->num_of_philos);
 	free(env);
 	return (NULL);
 }
-//sts_mutexのデリートも入れる　

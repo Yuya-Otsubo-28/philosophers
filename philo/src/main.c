@@ -6,7 +6,7 @@
 /*   By: yotsubo <yotsubo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 10:05:37 by yotsubo           #+#    #+#             */
-/*   Updated: 2022/12/15 07:02:39 by yotsubo          ###   ########.fr       */
+/*   Updated: 2022/12/15 09:30:26 by yotsubo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ static t_env	*init(int argc, char *argv[])
 	int				func_return;
 	t_time			time;
 	t_env			*env;
+
 	env = (t_env *)malloc(sizeof(t_env));
 	if (!env)
 	{

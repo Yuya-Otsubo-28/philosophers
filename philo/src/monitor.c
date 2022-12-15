@@ -6,7 +6,7 @@
 /*   By: yotsubo <yotsubo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 12:44:42 by yotsubo           #+#    #+#             */
-/*   Updated: 2022/12/15 07:52:25 by yotsubo          ###   ########.fr       */
+/*   Updated: 2022/12/15 09:00:39 by yotsubo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,6 @@ void	*monitor(void *arg)
 				env->philos[i]->status = DEAD;
 				pthread_mutex_unlock(env->philos[i]->sts_mutex);
 				set_fin_philos(env);
-				usleep(10000);
 				pthread_mutex_unlock(env->philos[i]->msg_mutex);
 				return (NULL);
 			}

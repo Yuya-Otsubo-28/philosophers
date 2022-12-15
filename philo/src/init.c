@@ -6,7 +6,7 @@
 /*   By: yotsubo <yotsubo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 10:05:17 by yotsubo           #+#    #+#             */
-/*   Updated: 2022/12/15 07:22:07 by yotsubo          ###   ########.fr       */
+/*   Updated: 2022/12/15 09:30:02 by yotsubo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,10 +161,11 @@ t_philo	**init_philo_fork(t_env *env, t_philo **philos)
 		error_handler(MALLOC_ERROR);
 		return (NULL);
 	}
+	env->forks = forks;
 	philos = init_philos(env, forks);
 	if (!philos)
 	{
-		destroy_forks(forks, env->num_of_philos);
+		destroy_forks(env, env->num_of_philos);
 		error_handler(MALLOC_ERROR);
 		return (NULL);
 	}
