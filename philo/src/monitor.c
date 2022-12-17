@@ -6,7 +6,7 @@
 /*   By: yotsubo <yotsubo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 12:44:42 by yotsubo           #+#    #+#             */
-/*   Updated: 2022/12/17 17:18:16 by yotsubo          ###   ########.fr       */
+/*   Updated: 2022/12/17 22:57:13 by yotsubo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ static int	check_death(t_env *env, int i)
 		if (i != 0)
 			set_fin_philos(env);
 		pthread_mutex_unlock(env->philos[i]->msg_mutex);
-		puts("yeah");
 		return (FINISH);
 	}
 	return (0);

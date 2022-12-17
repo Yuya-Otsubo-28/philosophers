@@ -6,7 +6,7 @@
 /*   By: yotsubo <yotsubo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 16:50:23 by yotsubo           #+#    #+#             */
-/*   Updated: 2022/12/17 17:32:32 by yotsubo          ###   ########.fr       */
+/*   Updated: 2022/12/17 22:37:30 by yotsubo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,7 +123,7 @@ void	*free_env(t_env *env, int free_status);
 /*  make_philos.c  */
 /* * * * * * * * * */
 
-int		event_start(t_philo **philos, t_env *env);
+int		event_start(t_env *env);
 
 /* * * * * * * * * */
 /*  philo_event.c  */
