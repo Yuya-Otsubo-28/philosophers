@@ -6,7 +6,7 @@
 #    By: yotsubo <yotsubo@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/30 10:05:26 by yotsubo           #+#    #+#              #
-#    Updated: 2022/12/15 13:01:12 by yotsubo          ###   ########.fr        #
+#    Updated: 2022/12/17 16:47:32 by yotsubo          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,7 +26,7 @@ OBJDIR = ./obj
 OBJS = $(addprefix $(OBJDIR)/, $(SRCS:.c=.o))
 INCLUDE = -I ./include
 CC	= cc
-CFLAGS = -Wall -Wextra -Werror -fsanitize=thread
+CFLAGS = -Wall -Wextra -Werror -g -fsanitize=thread
 
 all : $(NAME)
 

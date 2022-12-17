@@ -6,7 +6,7 @@
 /*   By: yotsubo <yotsubo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 13:30:41 by yotsubo           #+#    #+#             */
-/*   Updated: 2022/12/15 12:58:57 by yotsubo          ###   ########.fr       */
+/*   Updated: 2022/12/17 17:35:43 by yotsubo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ static int	philo_odd(t_philo *philo)
 	{
 		if (dis_msg(philo, THINK) == FINISH)
 			return (FINISH);
-		usleep((time_to_die - time_to_eat - time_to_sleep) * 10);
+		usleep((time_to_die - time_to_eat - time_to_sleep) * 5);
 		if (take_forks_and_eat_o(philo, time_to_eat) == FINISH)
 			return (FINISH);
 		if (dis_msg(philo, SLEEP) == FINISH)
@@ -101,7 +101,7 @@ static int	philo_even(t_philo *philo)
 	{
 		if (dis_msg(philo, THINK) == FINISH)
 			return (FINISH);
-		usleep((time_to_die - time_to_eat - time_to_sleep) * 10);
+		usleep((time_to_die - time_to_eat - time_to_sleep) * 5);
 		if (take_forks_and_eat_e(philo, time_to_eat) == FINISH)
 			return (FINISH);
 		if (dis_msg(philo, SLEEP) == FINISH)
@@ -115,14 +115,30 @@ void	*philo_event(void *arg)
 	t_philo			*philo;
 
 	philo = (t_philo *)arg;
+	pthread_mutex_lock(philo->sts_mutex);
+	philo->status = START;
+	pthread_mutex_unlock(philo->sts_mutex);
+	while (1)
+	{
+		pthread_mutex_lock(philo->msg_mutex);
+		if (philo->env->start == START)
+		{
+			pthread_mutex_unlock(philo->msg_mutex);
+			break ;
+		}
+		pthread_mutex_unlock(philo->msg_mutex);
+	}
 	if (philo->num % 2 == 1)
 	{
 		usleep(500);
 		philo_odd(philo);
 	}
 	else
+	{
+		usleep(200);
 		philo_even(philo);
-	return (NULL);
+	}
+		return (NULL);
 }
 
 // struct timeval	time;

@@ -6,7 +6,7 @@
 /*   By: yotsubo <yotsubo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 10:05:17 by yotsubo           #+#    #+#             */
-/*   Updated: 2022/12/15 10:21:20 by yotsubo          ###   ########.fr       */
+/*   Updated: 2022/12/17 16:39:27 by yotsubo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	init_env(int argc, char *argv[], t_env *env, t_time *time)
 		return (ARGS_ERROR);
 	if (gettimeofday(time, NULL) == -1)
 		return (TIME_ERROR);
-	env->start_time = adj_time_form(time);
+	env->start = NOTSET;
 	if (argc == ADDED_ARGS_NUM)
 	{
 		env->must_eat_num = ph_atoi(argv[5]);

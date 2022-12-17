@@ -6,7 +6,7 @@
 /*   By: yotsubo <yotsubo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 10:20:16 by yotsubo           #+#    #+#             */
-/*   Updated: 2022/12/15 10:49:42 by yotsubo          ###   ########.fr       */
+/*   Updated: 2022/12/17 16:20:15 by yotsubo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@ int	init_member(t_env *env, t_philo **philos,
 	{
 		if (i == 0 && env->num_of_philos > 1)
 			philos[0]->left = forks[env->num_of_philos - 1];
+		else if (i == 0 && env->num_of_philos == 1)
+			philos[0]->left = forks[i];
 		else
 			philos[i]->left = forks[i - 1];
 		philos[i]->right = forks[i];
@@ -31,7 +33,7 @@ int	init_member(t_env *env, t_philo **philos,
 		philos[i]->env = env;
 		philos[i]->num = i + 1;
 		philos[i]->msg_mutex = env->msg_mutex;
-		philos[i]->last_eat = env->start_time;
+		philos[i]->last_eat = 0;
 		philos[i]->eat_times = 0;
 	}
 	return (0);

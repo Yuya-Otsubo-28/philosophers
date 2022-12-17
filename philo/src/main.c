@@ -6,7 +6,7 @@
 /*   By: yotsubo <yotsubo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 10:05:37 by yotsubo           #+#    #+#             */
-/*   Updated: 2022/12/15 10:07:54 by yotsubo          ###   ########.fr       */
+/*   Updated: 2022/12/17 16:42:34 by yotsubo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,6 @@ int	main(int argc, char *argv[])
 		error_handler(event_res);
 		return (-1);
 	}
-	free_env(env, ALL);
+	//free_env(env, ALL);
 	return (0);
 }

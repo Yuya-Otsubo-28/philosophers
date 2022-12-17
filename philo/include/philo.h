@@ -6,7 +6,7 @@
 /*   By: yotsubo <yotsubo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 16:50:23 by yotsubo           #+#    #+#             */
-/*   Updated: 2022/12/15 10:22:29 by yotsubo          ###   ########.fr       */
+/*   Updated: 2022/12/17 17:32:32 by yotsubo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@
 # define NOTFIN 0
 
 # define NOTSET -1
+# define START 1
 
 typedef struct s_env	t_env;
 typedef struct s_fork	t_fork;
@@ -59,7 +60,7 @@ struct s_env {
 	int				time_to_die;
 	int				num_of_philos;
 	int				must_eat_num;
-	long			start_time;
+	int				start;
 	t_philo			**philos;
 	t_fork			**forks;
 	pthread_t		*th;
