@@ -6,11 +6,25 @@
 /*   By: yotsubo <yotsubo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 10:05:17 by yotsubo           #+#    #+#             */
-/*   Updated: 2022/12/17 22:35:18 by yotsubo          ###   ########.fr       */
+/*   Updated: 2022/12/18 13:46:13 by yotsubo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+int init_sts(t_env *env)
+{
+	int	i;
+
+	i = 0;
+	while (i < env->num_of_philos)
+	{
+		if (pthread_mutex_init(&env->sts_mutexs[i], NULL))
+			return (PTHREAD_ERROR);
+		i++;
+	}
+	return (0);
+}
 
 int	init_env(int argc, char *argv[], t_env *env, t_time *time)
 {
@@ -23,7 +37,6 @@ int	init_env(int argc, char *argv[], t_env *env, t_time *time)
 		return (ARGS_ERROR);
 	if (gettimeofday(time, NULL) == -1)
 		return (TIME_ERROR);
-	env->start = NOTSET;
 	if (argc == ADDED_ARGS_NUM)
 	{
 		env->must_eat_num = ph_atoi(argv[5]);
@@ -32,104 +45,64 @@ int	init_env(int argc, char *argv[], t_env *env, t_time *time)
 	}
 	else
 		env->must_eat_num = NOTSET;
-	env->philos = NULL;
-	env->th = NULL;
-	return (env_mutex_init(env));
+	if (init_sts(env))
+		return (PTHREAD_ERROR);
+	return (0);
 }
 
-static t_fork	**init_forks(t_env *env)
+static int	init_forks(t_env *env)
 {
-	t_fork	**forks;
-	int		i;
-	int		j;
+	int	i;
 
-	forks = (t_fork **)malloc(sizeof(t_fork *) * env->num_of_philos);
-	if (!forks)
-		return (NULL);
 	i = 0;
 	while (i < env->num_of_philos)
 	{
-		forks[i] = (t_fork *)malloc(sizeof(t_fork));
-		if (!forks[i])
-		{
-			while (i-- > 0)
-				free(forks[i]);
-			break ;
-		}
+		if (pthread_mutex_init(&env->forks[i].fork, NULL))
+			return (PTHREAD_ERROR);
 		i++;
 	}
-	j = -1;
-	while (i != 0 && ++j < env->num_of_philos)
-		pthread_mutex_init(&forks[j]->fork, NULL);
-	return (forks);
+	return (0);
 }
 
-static t_philo	**allc_philos(t_env *env)
+static int	init_member(int i, t_philo *philo, t_env *env)
 {
-	int		i;
-	t_philo	**philos;
+	philo->env = env;
+	if (i == 0 && env->num_of_philos > 1)
+		philo->left = &env->forks[env->num_of_philos - 1];
+	else if (i == 0 && env->num_of_philos == 1)
+		philo->left = &env->forks[0];
+	else
+		philo->left = &env->forks[i - 1];
+	philo->right = &env->forks[i];
+	philo->msg_mutex = &env->msg_mutex;
+	philo->sts_mutex = &env->sts_mutexs[i];
+	philo->status = NOTSET;
+	philo->num = i + 1;
+	philo->last_eat = NOTSET;
+	philo->eat_times = 0;
+	return (0);
+}
 
-	philos = (t_philo **)malloc(sizeof(t_philo *) * env->num_of_philos);
-	if (!philos)
-		return (NULL);
+static int	init_philos(t_env *env)
+{
+	int i;
+
 	i = 0;
 	while (i < env->num_of_philos)
 	{
-		philos[i] = (t_philo *)malloc(sizeof(t_philo));
-		if (!philos[i])
-		{
-			while (i-- > 0)
-				free(philos[i]);
-			free(philos);
-			return (NULL);
-		}
+		init_member(i, &env->philos[i], env);
 		i++;
 	}
-	return (philos);
+	return (0);
 }
 
-static t_philo	**init_philos(t_env *env, t_fork **forks)
+int	init_philo_fork(t_env *env)
 {
-	t_philo			**philos;
-	pthread_mutex_t	*sts_mutex;
-
-	philos = allc_philos(env);
-	if (!philos)
-		return (NULL);
-	sts_mutex = (pthread_mutex_t *)malloc(sizeof(pthread_t)
-			* env->num_of_philos);
-	if (!sts_mutex)
+	if (init_forks(env))
 	{
-		free_philos(philos, env->num_of_philos);
-		return (NULL);
+		error_handler(PTHREAD_ERROR);
+		return (PTHREAD_ERROR);
 	}
-	if (init_member(env, philos, forks, sts_mutex))
-	{
-		destroy_sts(sts_mutex, env->num_of_philos);
-		free_philos(philos, env->num_of_philos);
-		return (NULL);
-	}
-	env->sts_mutexs = sts_mutex;
-	return (philos);
-}
-
-t_philo	**init_philo_fork(t_env *env, t_philo **philos)
-{
-	t_fork	**forks;
-
-	forks = init_forks(env);
-	if (!forks)
-	{
-		error_handler(MALLOC_ERROR);
-		return (NULL);
-	}
-	env->forks = forks;
-	philos = init_philos(env, forks);
-	if (!philos)
-	{
-		destroy_forks(env, env->num_of_philos);
-		error_handler(MALLOC_ERROR);
-		return (NULL);
-	}
-	return (philos);
+	init_philos(env);
+	return (0);
 }

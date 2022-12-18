@@ -6,7 +6,7 @@
 /*   By: yotsubo <yotsubo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 13:30:41 by yotsubo           #+#    #+#             */
-/*   Updated: 2022/12/17 23:01:07 by yotsubo          ###   ########.fr       */
+/*   Updated: 2022/12/18 15:05:48 by yotsubo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,17 +72,14 @@ static int	philo_odd(t_philo *philo)
 	int	time_to_sleep;
 	int	time_to_die;
 
-	pthread_mutex_lock(philo->sts_mutex);
 	time_to_eat = philo->env->time_to_eat;
 	time_to_sleep = philo->env->time_to_sleep;
 	time_to_die = philo->env->time_to_die;
-	pthread_mutex_unlock(philo->sts_mutex);
-	printf("%d\n", (time_to_die - time_to_eat - time_to_sleep) * 10);
 	while (1)
 	{
 		if (dis_msg(philo, THINK) == FINISH)
 			return (FINISH);
-		usleep((time_to_die - time_to_eat - time_to_sleep) * 10);
+		usleep((time_to_die - time_to_eat - time_to_sleep) * 5);
 		if (take_forks_and_eat_o(philo, time_to_eat) == FINISH)
 			return (FINISH);
 		if (dis_msg(philo, SLEEP) == FINISH)
@@ -97,11 +94,9 @@ static int	philo_even(t_philo *philo)
 	int	time_to_sleep;
 	int	time_to_die;
 
-	printf("%p\n", philo->env);
 	time_to_eat = philo->env->time_to_eat;
 	time_to_sleep = philo->env->time_to_sleep;
 	time_to_die = philo->env->time_to_die;
-	printf("%d\n", (time_to_die - time_to_eat - time_to_sleep) * 10);
 	while (1)
 	{
 		if (dis_msg(philo, THINK) == FINISH)
@@ -125,29 +120,25 @@ void	*philo_event(void *arg)
 	pthread_mutex_unlock(philo->sts_mutex);
 	while (1)
 	{
-		pthread_mutex_lock(philo->msg_mutex);
-		if (philo->env->start == START)
+		pthread_mutex_lock(philo->sts_mutex);
+		if (philo->status == GO)
 		{
-			pthread_mutex_unlock(philo->msg_mutex);
+			pthread_mutex_unlock(philo->sts_mutex);
 			break ;
 		}
-		pthread_mutex_unlock(philo->msg_mutex);
+		pthread_mutex_unlock(philo->sts_mutex);
 	}
 	if (philo->num % 2 == 1)
 	{
-		printf("%d ; %p\n", philo->num, philo->env);
-		usleep(200);
-		printf("%d ; %p\n", philo->num, philo->env);
-		philo_odd(philo);
+		usleep(500);
+		if (philo->num == 1)
+			philo_even(philo);
+		else
+			philo_odd(philo);
 	}
 	else
-	{
-		printf("%d ; %p\n", philo->num, philo->env);
-		usleep(200);
-		printf("%d ; %p\n", philo->num, philo->env);
 		philo_even(philo);
-	}
-		return (NULL);
+	return (NULL);
 }
 
 // struct timeval	time;

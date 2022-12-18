@@ -6,7 +6,7 @@
 /*   By: yotsubo <yotsubo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 16:50:23 by yotsubo           #+#    #+#             */
-/*   Updated: 2022/12/17 22:37:30 by yotsubo          ###   ########.fr       */
+/*   Updated: 2022/12/18 14:49:09 by yotsubo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # include <limits.h>
 # include <errno.h>
 
+# define MAX_NUM 200
 # define MUST_ARGS_NUM 5
 # define ADDED_ARGS_NUM 6
 
@@ -48,25 +49,12 @@
 
 # define NOTSET -1
 # define START 1
+# define GO 2
 
 typedef struct s_env	t_env;
 typedef struct s_fork	t_fork;
 typedef struct s_philo	t_philo;
 typedef struct timeval	t_time;
-
-struct s_env {
-	int				time_to_eat;
-	int				time_to_sleep;
-	int				time_to_die;
-	int				num_of_philos;
-	int				must_eat_num;
-	int				start;
-	t_philo			**philos;
-	t_fork			**forks;
-	pthread_t		*th;
-	pthread_mutex_t	*msg_mutex;
-	pthread_mutex_t	*sts_mutexs;
-};
 
 struct s_fork {
 	pthread_mutex_t	fork;
@@ -79,17 +67,29 @@ struct s_philo {
 	long			last_eat;
 	pthread_mutex_t	*msg_mutex;
 	pthread_mutex_t	*sts_mutex;
-	pthread_mutex_t	et_mutex;
 	int				status;
 	int				num;
 	int				eat_times;
+};
+
+struct s_env {
+	int				time_to_eat;
+	int				time_to_sleep;
+	int				time_to_die;
+	int				num_of_philos;
+	int				must_eat_num;
+	t_philo			philos[MAX_NUM];
+	t_fork			forks[MAX_NUM];
+	pthread_t		th[MAX_NUM];
+	pthread_mutex_t	msg_mutex;
+	pthread_mutex_t	sts_mutexs[MAX_NUM];
 };
 
 /* * * * * * * * * */
 /*     init.c      */
 /* * * * * * * * * */
 
-t_philo	**init_philo_fork(t_env *env, t_philo **philos);
+int		init_philo_fork(t_env *env);
 
 int		init_env(int argc, char *argv[], t_env *env, t_time *time);
 
@@ -152,9 +152,6 @@ void	*set_fin_philos(t_env *env);
 void	unlock_all_sts(t_env *env);
 
 void	lock_all_sts(t_env *env);
-
-int		init_member(t_env *env, t_philo **philos,
-			t_fork **forks, pthread_mutex_t *sts_mutex);
 
 int		env_mutex_init(t_env *env);
 

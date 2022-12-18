@@ -6,7 +6,7 @@
 /*   By: yotsubo <yotsubo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 12:44:42 by yotsubo           #+#    #+#             */
-/*   Updated: 2022/12/17 22:57:13 by yotsubo          ###   ########.fr       */
+/*   Updated: 2022/12/18 14:19:43 by yotsubo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,20 +21,19 @@ static int	check_death(t_env *env, int i)
 	tmp = 0;
 	gettimeofday(&time, NULL);
 	now = adj_time_form(&time);
-	pthread_mutex_lock(env->philos[i]->sts_mutex);
-	if (env->philos[i]->last_eat != 0)
-		tmp = now - env->philos[i]->last_eat;
-	pthread_mutex_unlock(env->philos[i]->sts_mutex);
+	pthread_mutex_lock(&env->sts_mutexs[i]);
+	if (env->philos[i].last_eat != NOTSET)
+		tmp = now - env->philos[i].last_eat;
+	pthread_mutex_unlock(&env->sts_mutexs[i]);
 	if (tmp > env->time_to_die)
 	{
-		pthread_mutex_lock(env->philos[i]->msg_mutex);
-		printf("%ld %d died\n", now, env->philos[i]->num);
-		pthread_mutex_lock(env->philos[i]->sts_mutex);
-		env->philos[i]->status = DEAD;
-		pthread_mutex_unlock(env->philos[i]->sts_mutex);
-		if (i != 0)
-			set_fin_philos(env);
-		pthread_mutex_unlock(env->philos[i]->msg_mutex);
+		pthread_mutex_lock(&env->msg_mutex);
+		printf("%ld %d died\n", now, env->philos[i].num);
+		pthread_mutex_lock(&env->sts_mutexs[i]);
+		env->philos[i].status = DEAD;
+		pthread_mutex_unlock(&env->sts_mutexs[i]);
+		set_fin_philos(env);
+		pthread_mutex_unlock(&env->msg_mutex);
 		return (FINISH);
 	}
 	return (0);
@@ -44,9 +43,7 @@ static int	check_count(t_env *env, int ach_num)
 {
 	if (ach_num == env->num_of_philos)
 	{
-		lock_all_sts(env);
 		set_fin_philos(env);
-		unlock_all_sts(env);
 		return (FINISH);
 	}
 	return (0);
@@ -61,18 +58,21 @@ static void	check_start(t_env *env)
 	count = 0;
 	while (i < env->num_of_philos)
 	{
-		pthread_mutex_lock(env->philos[i]->sts_mutex);
-		if (env->philos[i]->status == START)
+		pthread_mutex_lock(&env->sts_mutexs[i]);
+		if (env->philos[i].status == START)
 			count++;
-		pthread_mutex_unlock(env->philos[i]->sts_mutex);
+		pthread_mutex_unlock(&env->sts_mutexs[i]);
 		i++;
 	}
-	if (count == env->num_of_philos)
+	i = 0;
+	while (count == env->num_of_philos && i < env->num_of_philos)
 	{
-		pthread_mutex_lock(env->msg_mutex);
-		env->start = START;
-		pthread_mutex_unlock(env->msg_mutex);
+		pthread_mutex_lock(&env->sts_mutexs[i]);
+		env->philos[i].status = GO;
+		pthread_mutex_unlock(&env->sts_mutexs[i]);
+		i++;
 	}
+
 }
 
 void	*monitor(void *arg)
@@ -93,10 +93,10 @@ void	*monitor(void *arg)
 				return (NULL);
 			if (env->must_eat_num != NOTSET)
 			{
-				pthread_mutex_lock(env->philos[i]->sts_mutex);
-				if (env->philos[i]->eat_times >= env->must_eat_num)
+				pthread_mutex_lock(env->philos[i].sts_mutex);
+				if (env->philos[i].eat_times >= env->must_eat_num)
 					ach_num++;
-				pthread_mutex_unlock(env->philos[i]->sts_mutex);
+				pthread_mutex_unlock(env->philos[i].sts_mutex);
 			}
 			i++;
 		}

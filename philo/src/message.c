@@ -6,7 +6,7 @@
 /*   By: yotsubo <yotsubo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/14 15:43:24 by yotsubo           #+#    #+#             */
-/*   Updated: 2022/12/17 22:57:28 by yotsubo          ###   ########.fr       */
+/*   Updated: 2022/12/18 15:04:23 by yotsubo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,13 +41,16 @@ int	dis_msg(t_philo *philo, int status)
 	int		finornot;
 	long	dis_time;
 
-	while ((pthread_mutex_lock(philo->msg_mutex) != 22))
-	{ 
-		if (status != THINK)
-			usleep(100);
-	}
+	pthread_mutex_lock(philo->msg_mutex);
 	gettimeofday(&time, NULL);
 	dis_time = adj_time_form(&time);
+	if (philo->last_eat == NOTSET)
+	{
+		pthread_mutex_lock(philo->sts_mutex);
+		philo->last_eat = dis_time;
+		pthread_mutex_unlock(philo->sts_mutex);
+	}
+	// pthread_mutex_lock(philo->msg_mutex);
 	finornot = judge_msg(philo, status, dis_time);
 	pthread_mutex_unlock(philo->msg_mutex);
 	return (finornot);
