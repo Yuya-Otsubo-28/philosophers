@@ -6,7 +6,7 @@
 /*   By: yotsubo <yotsubo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/14 15:43:24 by yotsubo           #+#    #+#             */
-/*   Updated: 2022/12/18 15:04:23 by yotsubo          ###   ########.fr       */
+/*   Updated: 2022/12/18 15:53:07 by yotsubo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,6 @@
 static int	judge_msg(t_philo *philo, int status, long dis_time)
 {
 	pthread_mutex_lock(philo->sts_mutex);
-	if (philo->last_eat == 0)
-		philo->last_eat = dis_time;
 	if (philo->status == DEAD || philo->status == FINISH)
 		return (FINISH);
 	else if (status == TAKE)

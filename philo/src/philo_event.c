@@ -6,7 +6,7 @@
 /*   By: yotsubo <yotsubo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 13:30:41 by yotsubo           #+#    #+#             */
-/*   Updated: 2022/12/18 15:05:48 by yotsubo          ###   ########.fr       */
+/*   Updated: 2022/12/18 16:11:40 by yotsubo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ static int	philo_odd(t_philo *philo)
 	{
 		if (dis_msg(philo, THINK) == FINISH)
 			return (FINISH);
-		usleep((time_to_die - time_to_eat - time_to_sleep) * 5);
+		usleep((time_to_die - time_to_eat - time_to_sleep) * 10);
 		if (take_forks_and_eat_o(philo, time_to_eat) == FINISH)
 			return (FINISH);
 		if (dis_msg(philo, SLEEP) == FINISH)
@@ -101,7 +101,7 @@ static int	philo_even(t_philo *philo)
 	{
 		if (dis_msg(philo, THINK) == FINISH)
 			return (FINISH);
-		usleep((time_to_die - time_to_eat - time_to_sleep) * 5);
+		usleep((time_to_die - time_to_eat - time_to_sleep) * 10);
 		if (take_forks_and_eat_e(philo, time_to_eat) == FINISH)
 			return (FINISH);
 		if (dis_msg(philo, SLEEP) == FINISH)
