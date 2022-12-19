@@ -6,7 +6,7 @@
 /*   By: yotsubo <yotsubo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 10:20:16 by yotsubo           #+#    #+#             */
-/*   Updated: 2022/12/19 09:19:26 by yotsubo          ###   ########.fr       */
+/*   Updated: 2022/12/19 11:00:01 by yotsubo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,14 @@ long	get_time(void)
 	return (res);
 }
 
+void	mod_usleep(int sleep_time)
+{
+	long	end;
+
+	end = get_time() + sleep_time;
+	while (get_time() <= end)
+		;
+}
 // int	env_mutex_init(t_env *env)
 // {
 // 	pthread_mutex_t	*msg_mutex;

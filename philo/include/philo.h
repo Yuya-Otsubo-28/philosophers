@@ -6,7 +6,7 @@
 /*   By: yotsubo <yotsubo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 16:50:23 by yotsubo           #+#    #+#             */
-/*   Updated: 2022/12/19 09:18:11 by yotsubo          ###   ########.fr       */
+/*   Updated: 2022/12/19 10:19:26 by yotsubo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ struct s_philo {
 	t_fork			*right;
 	t_fork			*left;
 	long			last_eat;
+	long			last_action;
 	pthread_mutex_t	*msg_mutex;
 	pthread_mutex_t	*sts_mutex;
 	int				status;
@@ -141,7 +142,7 @@ void	*monitor(void *arg);
 /* judge_finish.c  */
 /* * * * * * * * * */
 
-int		dis_msg(t_philo *philo, int status);
+int		dis_msg(t_philo *philo, int status, long sleep_time);
 
 /* * * * * * * * * */
 /* judge_finish.c  */
@@ -157,4 +158,5 @@ int		env_mutex_init(t_env *env);
 
 long	get_time(void);
 
+void	mod_usleep(int sleep_time);
 #endif

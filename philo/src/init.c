@@ -6,7 +6,7 @@
 /*   By: yotsubo <yotsubo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 10:05:17 by yotsubo           #+#    #+#             */
-/*   Updated: 2022/12/18 13:46:13 by yotsubo          ###   ########.fr       */
+/*   Updated: 2022/12/19 09:36:08 by yotsubo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ static int	init_member(int i, t_philo *philo, t_env *env)
 	philo->status = NOTSET;
 	philo->num = i + 1;
 	philo->last_eat = NOTSET;
+	philo->last_action = 0;
 	philo->eat_times = 0;
 	return (0);
 }

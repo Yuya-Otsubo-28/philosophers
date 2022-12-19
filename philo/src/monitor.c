@@ -6,7 +6,7 @@
 /*   By: yotsubo <yotsubo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 12:44:42 by yotsubo           #+#    #+#             */
-/*   Updated: 2022/12/19 09:26:22 by yotsubo          ###   ########.fr       */
+/*   Updated: 2022/12/19 10:23:31 by yotsubo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,9 @@ static int	check_death(t_env *env, int i)
 {
 	long	now;
 	long	tmp;
-	t_time	time;
 
 	tmp = 0;
-	gettimeofday(&time, NULL);
-	now = adj_time_form(&time);
+	now = get_time();
 	pthread_mutex_lock(&env->sts_mutexs[i]);
 	if (env->philos[i].last_eat != NOTSET)
 		tmp = now - env->philos[i].last_eat;
