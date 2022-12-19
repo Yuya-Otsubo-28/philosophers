@@ -6,7 +6,7 @@
 /*   By: yotsubo <yotsubo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 16:50:23 by yotsubo           #+#    #+#             */
-/*   Updated: 2022/12/18 17:43:23 by yotsubo          ###   ########.fr       */
+/*   Updated: 2022/12/19 09:18:11 by yotsubo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,5 +154,7 @@ void	unlock_all_sts(t_env *env);
 void	lock_all_sts(t_env *env);
 
 int		env_mutex_init(t_env *env);
+
+long	get_time(void);
 
 #endif

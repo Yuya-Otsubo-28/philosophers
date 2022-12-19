@@ -6,7 +6,7 @@
 /*   By: yotsubo <yotsubo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 12:44:42 by yotsubo           #+#    #+#             */
-/*   Updated: 2022/12/18 16:08:38 by yotsubo          ###   ########.fr       */
+/*   Updated: 2022/12/19 09:26:22 by yotsubo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ static int	check_count(t_env *env, int ach_num)
 	return (0);
 }
 
-static void	check_start(t_env *env)
+static void	check_start(t_env *env, int *flag)
 {
 	int	i;
 	int	count;
@@ -70,14 +70,15 @@ static void	check_start(t_env *env)
 		pthread_mutex_lock(&env->sts_mutexs[i]);
 		env->philos[i].status = GO;
 		pthread_mutex_unlock(&env->sts_mutexs[i]);
+		*flag = 1;
 		i++;
 	}
-
 }
 
 void	*monitor(void *arg)
 {
 	int		i;
+	static int	flag;
 	int		ach_num;
 	t_env	*env;
 
@@ -88,7 +89,8 @@ void	*monitor(void *arg)
 		i = 0;
 		while (i < env->num_of_philos)
 		{
-			check_start(env);
+			if (!flag)
+				check_start(env, &flag);
 			if (check_death(env, i) == FINISH)
 				return (NULL);
 			if (env->must_eat_num != NOTSET)

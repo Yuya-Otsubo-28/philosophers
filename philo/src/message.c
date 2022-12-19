@@ -6,7 +6,7 @@
 /*   By: yotsubo <yotsubo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/14 15:43:24 by yotsubo           #+#    #+#             */
-/*   Updated: 2022/12/18 15:53:07 by yotsubo          ###   ########.fr       */
+/*   Updated: 2022/12/19 09:22:46 by yotsubo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,12 @@ int	dis_msg(t_philo *philo, int status)
 	}
 	// pthread_mutex_lock(philo->msg_mutex);
 	finornot = judge_msg(philo, status, dis_time);
+	if (status == EAT)
+	{
+		pthread_mutex_lock(philo->sts_mutex);
+		philo->last_eat = get_time();
+		pthread_mutex_unlock(philo->sts_mutex);
+	}
 	pthread_mutex_unlock(philo->msg_mutex);
 	return (finornot);
 }
