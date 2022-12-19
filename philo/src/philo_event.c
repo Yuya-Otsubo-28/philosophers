@@ -6,7 +6,7 @@
 /*   By: yotsubo <yotsubo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 13:30:41 by yotsubo           #+#    #+#             */
-/*   Updated: 2022/12/19 11:05:39 by yotsubo          ###   ########.fr       */
+/*   Updated: 2022/12/19 13:29:14 by yotsubo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,6 @@ static int	philo_odd(t_philo *philo)
 	time_to_eat = philo->env->time_to_eat;
 	time_to_sleep = philo->env->time_to_sleep;
 	time_to_die = philo->env->time_to_die;
-	printf("%d : %ld\n", philo->num, get_time());
 	if (time_to_die > time_to_eat + time_to_sleep)
 		time_to_think = time_to_die - time_to_eat - time_to_sleep;
 	else
@@ -100,7 +99,6 @@ static int	philo_even(t_philo *philo)
 	time_to_eat = philo->env->time_to_eat;
 	time_to_sleep = philo->env->time_to_sleep;
 	time_to_die = philo->env->time_to_die;
-	printf("%d : %ld\n", philo->num, get_time());
 	if (time_to_die > time_to_eat + time_to_sleep)
 		time_to_think = time_to_die - time_to_eat - time_to_sleep;
 	else
@@ -124,21 +122,10 @@ void	*philo_event(void *arg)
 	pthread_mutex_lock(philo->sts_mutex);
 	philo->status = START;
 	pthread_mutex_unlock(philo->sts_mutex);
-	while (1)
-	{
-		pthread_mutex_lock(philo->sts_mutex);
-		if (philo->status == GO)
-		{
-			pthread_mutex_unlock(philo->sts_mutex);
-			break ;
-		}
-		pthread_mutex_unlock(philo->sts_mutex);
-		mod_usleep(1);
-	}
-	printf("%d : %ld\n", philo->num, get_time());
+	wait_start(philo);
 	if (philo->num % 2 == 1)
 	{
-		mod_usleep(philo->env->time_to_eat);
+		mod_usleep(1);
 		if (philo->num == 1)
 			philo_even(philo);
 		else
@@ -148,9 +135,3 @@ void	*philo_event(void *arg)
 		philo_even(philo);
 	return (NULL);
 }
-
-// struct timeval	time;
-// long			start;
-// gettimeofday(&time, NULL);
-// start = adj_time_form(&time);
-// printf("%d : %ld\n", philo->num, start);

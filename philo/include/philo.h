@@ -6,7 +6,7 @@
 /*   By: yotsubo <yotsubo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 16:50:23 by yotsubo           #+#    #+#             */
-/*   Updated: 2022/12/19 10:19:26 by yotsubo          ###   ########.fr       */
+/*   Updated: 2022/12/19 13:38:54 by yotsubo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ struct s_env {
 	int				time_to_die;
 	int				num_of_philos;
 	int				must_eat_num;
+	int				fin;
 	t_philo			philos[MAX_NUM];
 	t_fork			forks[MAX_NUM];
 	pthread_t		th[MAX_NUM];
@@ -148,7 +149,7 @@ int		dis_msg(t_philo *philo, int status, long sleep_time);
 /* judge_finish.c  */
 /* * * * * * * * * */
 
-void	*set_fin_philos(t_env *env);
+void	*set_fin_philos(t_env *env, int dead_philo);
 
 void	unlock_all_sts(t_env *env);
 
@@ -159,4 +160,11 @@ int		env_mutex_init(t_env *env);
 long	get_time(void);
 
 void	mod_usleep(int sleep_time);
+
+void	wait_start(t_philo *philo);
+
+int		inc_ach(t_env *env, int ach_num, int i);
+
+int		init_sts(t_env *env);
+
 #endif

@@ -6,7 +6,7 @@
 /*   By: yotsubo <yotsubo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 10:11:01 by yotsubo           #+#    #+#             */
-/*   Updated: 2022/12/19 10:26:32 by yotsubo          ###   ########.fr       */
+/*   Updated: 2022/12/19 13:33:07 by yotsubo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static void	*philo_one(void *arg)
 {
-	t_philo *philo;
+	t_philo	*philo;
 	t_time	time;
 	long	start;
 	int		time_to_die;
@@ -34,7 +34,7 @@ static int	philo_one_case(t_env *env)
 {
 	if (pthread_create(&env->th[0], NULL, &philo_one, &env->philos[0]))
 		return (PTHREAD_ERROR);
-	if (pthread_detach(env->th[0]))
+	if (pthread_join(env->th[0], NULL))
 		return (PTHREAD_ERROR);
 	return (0);
 }
@@ -54,13 +54,16 @@ int	event_start(t_env *env)
 	{
 		if (pthread_create(&env->th[i], NULL, &philo_event, &env->philos[i]))
 			return (PTHREAD_ERROR);
-		if (pthread_detach(env->th[i]))
-			return (PTHREAD_ERROR);
 		i++;
 	}
-	if (pthread_create(&env->th[i], NULL, &monitor, env))
+	while (i-- > 0)
+	{
+		if (pthread_detach(env->th[i]))
+			return (PTHREAD_ERROR);
+	}
+	if (pthread_create(&env->th[env->num_of_philos], NULL, &monitor, env))
 		return (PTHREAD_ERROR);
-	if (pthread_join(env->th[i], NULL))
+	if (pthread_join(env->th[env->num_of_philos], NULL))
 		return (PTHREAD_ERROR);
 	return (0);
 }

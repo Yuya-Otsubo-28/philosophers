@@ -6,25 +6,11 @@
 /*   By: yotsubo <yotsubo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 10:05:17 by yotsubo           #+#    #+#             */
-/*   Updated: 2022/12/19 09:36:08 by yotsubo          ###   ########.fr       */
+/*   Updated: 2022/12/19 13:37:41 by yotsubo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-
-int init_sts(t_env *env)
-{
-	int	i;
-
-	i = 0;
-	while (i < env->num_of_philos)
-	{
-		if (pthread_mutex_init(&env->sts_mutexs[i], NULL))
-			return (PTHREAD_ERROR);
-		i++;
-	}
-	return (0);
-}
 
 int	init_env(int argc, char *argv[], t_env *env, t_time *time)
 {
@@ -45,6 +31,7 @@ int	init_env(int argc, char *argv[], t_env *env, t_time *time)
 	}
 	else
 		env->must_eat_num = NOTSET;
+	env->fin = NOTSET;
 	if (init_sts(env))
 		return (PTHREAD_ERROR);
 	return (0);
@@ -86,7 +73,7 @@ static int	init_member(int i, t_philo *philo, t_env *env)
 
 static int	init_philos(t_env *env)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (i < env->num_of_philos)

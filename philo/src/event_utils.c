@@ -1,46 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   init_utils.c                                       :+:      :+:    :+:   */
+/*   event_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yotsubo <yotsubo@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/12/15 10:20:16 by yotsubo           #+#    #+#             */
-/*   Updated: 2022/12/19 13:37:45 by yotsubo          ###   ########.fr       */
+/*   Created: 2022/12/19 13:26:38 by yotsubo           #+#    #+#             */
+/*   Updated: 2022/12/19 13:38:04 by yotsubo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-long	get_time(void)
+void	wait_start(t_philo *philo)
 {
-	t_time	time;
-	long	res;
-
-	gettimeofday(&time, NULL);
-	res = adj_time_form(&time);
-	return (res);
-}
-
-void	mod_usleep(int sleep_time)
-{
-	long	end;
-
-	end = get_time() + sleep_time;
-	while (get_time() <= end)
-		;
-}
-
-int	init_sts(t_env *env)
-{
-	int	i;
-
-	i = 0;
-	while (i < env->num_of_philos)
+	while (1)
 	{
-		if (pthread_mutex_init(&env->sts_mutexs[i], NULL))
-			return (PTHREAD_ERROR);
-		i++;
+		pthread_mutex_lock(philo->sts_mutex);
+		if (philo->status == GO)
+		{
+			pthread_mutex_unlock(philo->sts_mutex);
+			break ;
+		}
+		pthread_mutex_unlock(philo->sts_mutex);
 	}
-	return (0);
 }
