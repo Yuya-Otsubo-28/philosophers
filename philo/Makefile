@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: yotsubo <yotsubo@student.42.fr>            +#+  +:+       +#+         #
+#    By: yotsubo <y.otsubo.886@ms.saitama-u.ac.j    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/30 10:05:26 by yotsubo           #+#    #+#              #
-#    Updated: 2022/12/19 13:27:59 by yotsubo          ###   ########.fr        #
+#    Updated: 2023/01/11 11:24:03 by yotsubo          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,7 +26,7 @@ OBJDIR = ./obj
 OBJS = $(addprefix $(OBJDIR)/, $(SRCS:.c=.o))
 INCLUDE = -I ./include
 CC	= cc
-CFLAGS = -Wall -Wextra -Werror -fsanitize=address
+CFLAGS = -Wall -Wextra -Werror -pthread
 
 all : $(NAME)
 

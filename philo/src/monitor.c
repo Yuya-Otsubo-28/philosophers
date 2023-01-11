@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   monitor.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yotsubo <yotsubo@student.42.fr>            +#+  +:+       +#+        */
+/*   By: yotsubo <y.otsubo.886@ms.saitama-u.ac.j    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 12:44:42 by yotsubo           #+#    #+#             */
-/*   Updated: 2022/12/19 13:36:19 by yotsubo          ###   ########.fr       */
+/*   Updated: 2023/01/11 11:25:10 by yotsubo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static int	check_death(t_env *env, int i)
 	{
 		pthread_mutex_lock(&env->msg_mutex);
 		lock_all_sts(env);
-		printf("%ld %d died\n", now, env->philos[i].num);
+		printf("\x1b[31m%ld %d died\n\x1b[0m", now, env->philos[i].num);
 		env->fin = FINISH;
 		unlock_all_sts(env);
 		pthread_mutex_unlock(&env->msg_mutex);

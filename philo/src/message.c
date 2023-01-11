@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   message.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yotsubo <yotsubo@student.42.fr>            +#+  +:+       +#+        */
+/*   By: yotsubo <y.otsubo.886@ms.saitama-u.ac.j    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/14 15:43:24 by yotsubo           #+#    #+#             */
-/*   Updated: 2022/12/19 13:35:30 by yotsubo          ###   ########.fr       */
+/*   Updated: 2023/01/11 11:28:45 by yotsubo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,15 +22,15 @@ static int	judge_msg(t_philo *philo, int status)
 	else if (status == TAKE)
 		printf("%ld %d has taken a fork\n", philo->last_action, philo->num);
 	else if (status == SLEEP)
-		printf("%ld %d is sleeping\n", philo->last_action, philo->num);
+		printf("\x1b[34m%ld %d is sleeping\n\x1b[0m", philo->last_action, philo->num);
 	else if (status == EAT)
 	{
 		philo->last_eat = philo->last_action;
-		printf("%ld %d is eating\n", philo->last_action, philo->num);
+		printf("\x1b[33m%ld %d is eating\n\x1b[0m", philo->last_action, philo->num);
 		philo->eat_times++;
 	}
 	else if (status == THINK)
-		printf("%ld %d is thinking\n", philo->last_action, philo->num);
+		printf("\x1b[32m%ld %d is thinking\n\x1b[0m", philo->last_action, philo->num);
 	pthread_mutex_unlock(philo->sts_mutex);
 	pthread_mutex_unlock(philo->msg_mutex);
 	return (NOTFIN);
