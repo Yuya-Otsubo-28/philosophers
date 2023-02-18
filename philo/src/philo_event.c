@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo_event.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yotsubo <yotsubo@student.42.fr>            +#+  +:+       +#+        */
+/*   By: yotsubo <y.otsubo.886@ms.saitama-u.ac.j    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 13:30:41 by yotsubo           #+#    #+#             */
-/*   Updated: 2022/12/19 13:29:14 by yotsubo          ###   ########.fr       */
+/*   Updated: 2023/02/18 17:25:27 by yotsubo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,102 +14,88 @@
 
 static int	take_forks_and_eat_e(t_philo *philo, long time_to_eat)
 {
-	pthread_mutex_lock(&philo->right->fork);
+	pthread_mutex_lock(&philo->info->forks[philo->left]);
 	if (dis_msg(philo, TAKE, 0) == FINISH)
 	{
-		pthread_mutex_unlock(&philo->right->fork);
+		pthread_mutex_unlock(&philo->info->forks[philo->left]);
 		return (FINISH);
 	}
-	pthread_mutex_lock(&philo->left->fork);
+	pthread_mutex_lock(&philo->info->forks[philo->right]);
 	if (dis_msg(philo, TAKE, 0) == FINISH)
 	{
-		pthread_mutex_unlock(&philo->right->fork);
-		pthread_mutex_unlock(&philo->left->fork);
+		pthread_mutex_unlock(&philo->info->forks[philo->right]);
+		pthread_mutex_unlock(&philo->info->forks[philo->left]);
 		return (FINISH);
 	}
 	if (dis_msg(philo, EAT, time_to_eat) == FINISH)
 	{
-		pthread_mutex_unlock(&philo->right->fork);
-		pthread_mutex_unlock(&philo->left->fork);
+		pthread_mutex_unlock(&philo->info->forks[philo->right]);
+		pthread_mutex_unlock(&philo->info->forks[philo->left]);
 		return (FINISH);
 	}
-	pthread_mutex_unlock(&philo->left->fork);
-	pthread_mutex_unlock(&philo->right->fork);
+	pthread_mutex_unlock(&philo->info->forks[philo->left]);
+	pthread_mutex_unlock(&philo->info->forks[philo->right]);
 	return (0);
 }
 
 static int	take_forks_and_eat_o(t_philo *philo, long time_to_eat)
 {
-	pthread_mutex_lock(&philo->left->fork);
+	pthread_mutex_lock(&philo->info->forks[philo->right]);
 	if (dis_msg(philo, TAKE, 0) == FINISH)
 	{
-		pthread_mutex_unlock(&philo->left->fork);
+		pthread_mutex_unlock(&philo->info->forks[philo->right]);
 		return (FINISH);
 	}
-	pthread_mutex_lock(&philo->right->fork);
+	pthread_mutex_lock(&philo->info->forks[philo->left]);
 	if (dis_msg(philo, TAKE, 0) == FINISH)
 	{
-		pthread_mutex_unlock(&philo->left->fork);
-		pthread_mutex_unlock(&philo->right->fork);
+		pthread_mutex_unlock(&philo->info->forks[philo->right]);
+		pthread_mutex_unlock(&philo->info->forks[philo->left]);
 		return (FINISH);
 	}
 	if (dis_msg(philo, EAT, time_to_eat) == FINISH)
 	{
-		pthread_mutex_unlock(&philo->left->fork);
-		pthread_mutex_unlock(&philo->right->fork);
+		pthread_mutex_unlock(&philo->info->forks[philo->right]);
+		pthread_mutex_unlock(&philo->info->forks[philo->left]);
 		return (FINISH);
 	}
-	pthread_mutex_unlock(&philo->right->fork);
-	pthread_mutex_unlock(&philo->left->fork);
+	pthread_mutex_unlock(&philo->info->forks[philo->right]);
+	pthread_mutex_unlock(&philo->info->forks[philo->left]);
 	return (0);
 }
 
-static int	philo_odd(t_philo *philo)
+static int	philo_life_o(t_philo *philo)
 {
 	int	time_to_eat;
 	int	time_to_sleep;
-	int	time_to_die;
-	int	time_to_think;
 
-	time_to_eat = philo->env->time_to_eat;
-	time_to_sleep = philo->env->time_to_sleep;
-	time_to_die = philo->env->time_to_die;
-	if (time_to_die > time_to_eat + time_to_sleep)
-		time_to_think = time_to_die - time_to_eat - time_to_sleep;
-	else
-		time_to_think = 50;
+	time_to_eat = philo->info->time_to_eat;
+	time_to_sleep = philo->info->time_to_sleep;
 	while (1)
 	{
-		if (dis_msg(philo, THINK, time_to_think) == FINISH)
-			return (FINISH);
 		if (take_forks_and_eat_o(philo, time_to_eat) == FINISH)
 			return (FINISH);
 		if (dis_msg(philo, SLEEP, time_to_sleep) == FINISH)
 			return (FINISH);
+		if (dis_msg(philo, THINK, 0) == FINISH)
+			return (FINISH);
 	}
 }
 
-static int	philo_even(t_philo *philo)
+static int	philo_life_e(t_philo *philo)
 {
 	int	time_to_eat;
 	int	time_to_sleep;
-	int	time_to_die;
-	int	time_to_think;
 
-	time_to_eat = philo->env->time_to_eat;
-	time_to_sleep = philo->env->time_to_sleep;
-	time_to_die = philo->env->time_to_die;
-	if (time_to_die > time_to_eat + time_to_sleep)
-		time_to_think = time_to_die - time_to_eat - time_to_sleep;
-	else
-		time_to_think = 50;
+	time_to_eat = philo->info->time_to_eat;
+	time_to_sleep = philo->info->time_to_sleep;
 	while (1)
 	{
-		if (dis_msg(philo, THINK, time_to_think) == FINISH)
-			return (FINISH);
 		if (take_forks_and_eat_e(philo, time_to_eat) == FINISH)
 			return (FINISH);
 		if (dis_msg(philo, SLEEP, time_to_sleep) == FINISH)
+			return (FINISH);
+		if (dis_msg(philo, THINK, 0) == FINISH)
 			return (FINISH);
 	}
 }
@@ -119,19 +105,24 @@ void	*philo_event(void *arg)
 	t_philo			*philo;
 
 	philo = (t_philo *)arg;
-	pthread_mutex_lock(philo->sts_mutex);
-	philo->status = START;
-	pthread_mutex_unlock(philo->sts_mutex);
-	wait_start(philo);
-	if (philo->num % 2 == 1)
-	{
-		mod_usleep(1);
-		if (philo->num == 1)
-			philo_even(philo);
-		else
-			philo_odd(philo);
-	}
+	pthread_mutex_lock(&philo->info->num_mutex);
+	philo->info->next_philo_num += 2;
+	philo->num = philo->info->next_philo_num;
+	if (philo->info->next_philo_num == philo->info->num_of_philos
+		|| philo->info->next_philo_num == philo->info->num_of_philos - 1)
+		philo->info->next_philo_num = -1;
+	pthread_mutex_unlock(&philo->info->num_mutex);
+	philo->right = philo->num - 1;
+	if (philo->num == 1)
+		philo->left = philo->info->num_of_philos - 1;
 	else
-		philo_even(philo);
+		philo->left = philo->num - 2;
+	if (philo->num % 2 == 0)
+		philo_life_e(philo);
+	else
+	{
+		dis_msg(philo, THINK, 0);
+		philo_life_o(philo);
+	}
 	return (NULL);
 }

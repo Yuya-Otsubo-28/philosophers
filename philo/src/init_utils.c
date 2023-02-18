@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yotsubo <yotsubo@student.42.fr>            +#+  +:+       +#+        */
+/*   By: yotsubo <y.otsubo.886@ms.saitama-u.ac.j    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 10:20:16 by yotsubo           #+#    #+#             */
-/*   Updated: 2022/12/19 13:37:45 by yotsubo          ###   ########.fr       */
+/*   Updated: 2023/02/18 10:43:11 by yotsubo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,14 +31,14 @@ void	mod_usleep(int sleep_time)
 		;
 }
 
-int	init_sts(t_env *env)
+int	init_sts(t_info *info)
 {
 	int	i;
 
 	i = 0;
-	while (i < env->num_of_philos)
+	while (i < info->num_of_philos)
 	{
-		if (pthread_mutex_init(&env->sts_mutexs[i], NULL))
+		if (pthread_mutex_init(&info->sts_mutexs[i], NULL))
 			return (PTHREAD_ERROR);
 		i++;
 	}

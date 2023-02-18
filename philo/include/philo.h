@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yotsubo <yotsubo@student.42.fr>            +#+  +:+       +#+        */
+/*   By: yotsubo <y.otsubo.886@ms.saitama-u.ac.j    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/30 16:50:23 by yotsubo           #+#    #+#             */
-/*   Updated: 2022/12/19 13:38:54 by yotsubo          ###   ########.fr       */
+/*   Updated: 2023/02/18 11:36:35 by yotsubo          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 # include <limits.h>
 # include <errno.h>
 
-# define MAX_NUM 200
+# define MAX_NUM 201
 # define MUST_ARGS_NUM 5
 # define ADDED_ARGS_NUM 6
 
@@ -41,7 +41,7 @@
 # define LEFT -1
 
 # define ALL 1
-# define ONLY_ENV 2
+# define ONLY_INFO 2
 # define PHILOS_AND_FROKS 4
 # define PHILOS 5
 
@@ -49,21 +49,16 @@
 
 # define NOTSET -1
 # define START 1
-# define GO 2
+# define GO 7
 
-typedef struct s_env	t_env;
-typedef struct s_fork	t_fork;
+typedef struct s_info	t_info;
 typedef struct s_philo	t_philo;
 typedef struct timeval	t_time;
 
-struct s_fork {
-	pthread_mutex_t	fork;
-};
-
 struct s_philo {
-	t_env			*env;
-	t_fork			*right;
-	t_fork			*left;
+	t_info			*info;
+	int				right;
+	int				left;
 	long			last_eat;
 	long			last_action;
 	pthread_mutex_t	*msg_mutex;
@@ -73,17 +68,20 @@ struct s_philo {
 	int				eat_times;
 };
 
-struct s_env {
+struct s_info {
+	long			start_time;
 	int				time_to_eat;
 	int				time_to_sleep;
 	int				time_to_die;
 	int				num_of_philos;
+	int				next_philo_num;
 	int				must_eat_num;
 	int				fin;
 	t_philo			philos[MAX_NUM];
-	t_fork			forks[MAX_NUM];
+	pthread_mutex_t	forks[MAX_NUM];
 	pthread_t		th[MAX_NUM];
 	pthread_mutex_t	msg_mutex;
+	pthread_mutex_t	num_mutex;
 	pthread_mutex_t	sts_mutexs[MAX_NUM];
 };
 
@@ -91,9 +89,9 @@ struct s_env {
 /*     init.c      */
 /* * * * * * * * * */
 
-int		init_philo_fork(t_env *env);
+int		init_philo_fork(t_info *info);
 
-int		init_env(int argc, char *argv[], t_env *env, t_time *time);
+int		init_info(int argc, char *argv[], t_info *info, t_time *time);
 
 /* * * * * * * * * */
 /*  philo_utils.c  */
@@ -117,15 +115,15 @@ void	free_philos(t_philo **philos, int num_of_philos);
 
 void	destroy_sts(pthread_mutex_t *sts_mutex, int num_of_philos);
 
-void	destroy_forks(t_env *env, int num_of_forks);
+void	destroy_forks(t_info *info, int num_of_forks);
 
-void	*free_env(t_env *env, int free_status);
+void	*free_info(t_info *info, int free_status);
 
 /* * * * * * * * * */
 /*  make_philos.c  */
 /* * * * * * * * * */
 
-int		event_start(t_env *env);
+int		event_start(t_info *info);
 
 /* * * * * * * * * */
 /*  philo_event.c  */
@@ -149,13 +147,13 @@ int		dis_msg(t_philo *philo, int status, long sleep_time);
 /* judge_finish.c  */
 /* * * * * * * * * */
 
-void	*set_fin_philos(t_env *env, int dead_philo);
+void	*set_fin_philos(t_info *info, int dead_philo);
 
-void	unlock_all_sts(t_env *env);
+void	unlock_all_sts(t_info *info);
 
-void	lock_all_sts(t_env *env);
+void	lock_all_sts(t_info *info);
 
-int		env_mutex_init(t_env *env);
+int		info_mutex_init(t_info *info);
 
 long	get_time(void);
 
@@ -163,8 +161,8 @@ void	mod_usleep(int sleep_time);
 
 void	wait_start(t_philo *philo);
 
-int		inc_ach(t_env *env, int ach_num, int i);
+int		inc_ach(t_info *info, int ach_num, int i);
 
-int		init_sts(t_env *env);
+int		init_sts(t_info *info);
 
 #endif
